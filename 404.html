@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Página no encontrada · Glow STEM</title>
+<meta name="robots" content="noindex">
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("edutech-theme"),p=localStorage.getItem("edutech-palette");if(t==="dark")d.setAttribute("data-theme","dark");if(p!=="original"&&p!=="formal")p="rosa";if(p!=="original")d.setAttribute("data-palette",p);}catch(e){d.setAttribute("data-palette","rosa");}})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--teal-dark:#15383A;--teal:#1A6B6B;--teal-bright:#2A9D9D;--teal-light:#3FB8B8;--teal-pale:#B2DADA;--rosa:#C9807A;--rosa-light:#E8B4B0;--crema:#FAF6F0}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:"DM Sans",system-ui,sans-serif;background:var(--teal-dark);color:var(--crema);display:flex;align-items:center;justify-content:center;padding:max(24px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom));position:relative;overflow-x:hidden}
+body::before{content:"";position:fixed;top:-15%;right:-10%;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(42,157,157,0.25) 0%,transparent 68%);pointer-events:none}
+body::after{content:"";position:fixed;bottom:-20%;left:-10%;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(201,128,122,0.14) 0%,transparent 70%);pointer-events:none}
+.box{max-width:620px;width:100%;text-align:center;position:relative;z-index:1}
+.code{font-family:"Cormorant Garamond",serif;font-size:clamp(96px,22vw,168px);font-weight:600;line-height:0.9;background:linear-gradient(120deg,var(--teal-light),var(--rosa-light));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;margin-bottom:10px}
+h1{font-family:"Cormorant Garamond",serif;font-size:clamp(28px,5vw,40px);font-weight:500;line-height:1.15;margin-bottom:14px}
+p.lead{font-size:16px;color:rgba(250,246,240,0.75);line-height:1.7;margin-bottom:26px}
+.term{background:rgba(8,22,23,0.55);border:1px solid rgba(178,218,218,0.18);border-radius:16px;padding:18px 20px;text-align:left;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px;line-height:1.8;margin-bottom:24px;overflow-x:auto}
+.term .dots{display:flex;gap:6px;margin-bottom:10px}.term .dots span{width:10px;height:10px;border-radius:50%;background:rgba(178,218,218,0.25)}
+.term .dots span:first-child{background:var(--rosa)}
+.p{color:var(--teal-light)}.err{color:#F0A49E}.cm{color:rgba(178,218,218,0.65)}
+.quote{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:clamp(19px,3vw,23px);color:var(--teal-pale);min-height:64px;margin-bottom:28px;transition:opacity 0.5s}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;padding:14px 26px;border-radius:13px;text-decoration:none;transition:transform 0.2s,background 0.2s;min-height:48px}
+.btn svg{width:17px;height:17px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.btn-a{background:#A8524C;color:#fff}.btn-a:hover{background:#934540;transform:translateY(-2px)}
+.btn-b{border:1px solid rgba(178,218,218,0.35);color:var(--teal-pale)}.btn-b:hover{background:rgba(178,218,218,0.1);transform:translateY(-2px)}
+.btn:focus-visible{outline:2px solid var(--rosa-light);outline-offset:3px}
+
+/* Paletas (misma elección que en la página principal) */
+[data-palette="formal"]{--teal-dark:#14213D;--teal-light:#8FB8E8;--teal-pale:#B8C9E0;--rosa:#9B2C3B;--rosa-light:#E6C98A;--crema:#F5F7FA}
+[data-palette="formal"] .btn-a{background:#9B2C3B}[data-palette="formal"] .btn-a:hover{background:#8E2A35}
+[data-palette="formal"][data-theme="dark"]{--teal-dark:#0D1629}
+[data-palette="rosa"]{--teal-dark:#FFFFFF;--teal-light:#D81B7E;--teal-pale:#7C5E6E;--rosa:#C9A227;--rosa-light:#D4AF37;--crema:#3B2435}
+[data-palette="rosa"] h1,[data-palette="rosa"] .quote{font-family:"Playfair Display",Georgia,serif;color:#D81B7E}[data-palette="rosa"] .code{font-family:"Playfair Display",Georgia,serif;font-weight:700}[data-palette="rosa"] body{font-family:"Nunito",system-ui,sans-serif}
+[data-palette="rosa"] p.lead{color:#8C4B68}[data-palette="rosa"] .term{background:#FFFFFF;border-color:rgba(173,53,103,0.18)}
+[data-palette="rosa"] .cm{color:#8C4B68}[data-palette="rosa"] .err{color:#AD3567}[data-palette="rosa"] .term .dots span{background:rgba(173,53,103,0.25)}
+[data-palette="rosa"] .code{background-image:linear-gradient(100deg,#8A6510,#C9A227,#F3DD8C,#C9A227,#8A6510);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+[data-palette="rosa"] .btn-a{background:linear-gradient(100deg,#C9A227,#E9CD6F,#D4AF37);color:#4A1730}
+[data-palette="rosa"] .btn-b{border-color:rgba(173,53,103,0.35);color:#AD3567}
+[data-palette="rosa"] body::before{background:radial-gradient(circle,rgba(217,70,138,0.14) 0%,transparent 68%)}
+[data-palette="rosa"] body::after{background:radial-gradient(circle,rgba(201,162,39,0.14) 0%,transparent 70%)}
+[data-palette="rosa"][data-theme="dark"]{--teal-dark:#16090F;--teal-light:#F2A0C4;--teal-pale:#E3BCCD;--crema:#FBE4EE}
+[data-palette="rosa"][data-theme="dark"] p.lead,[data-palette="rosa"][data-theme="dark"] .cm{color:#E3BCCD}
+[data-palette="rosa"][data-theme="dark"] .term{background:#2B1622}
+[data-palette="rosa"][data-theme="dark"] .err{color:#F2A0C4}
+[data-palette="rosa"][data-theme="dark"] .btn-b{color:#F2A0C4;border-color:rgba(242,160,196,0.4)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@supports not ((background-clip:text) or (-webkit-background-clip:text)){
+  .code,[data-palette="rosa"] .code{background:none;-webkit-text-fill-color:currentColor;color:var(--teal-light)}
+  [data-palette="rosa"] .code{color:#8A6510}
+}
+</style>
+</head>
+<body>
+<main class="box">
+  <div class="code" aria-hidden="true">404</div>
+  <h1>Esta página no existe… todavía</h1>
+  <p class="lead">Puede que el enlace haya cambiado o que haya un error de escritura. Tranquila, tranquilo: equivocarse también es parte de programar.</p>
+  <div class="term" aria-label="Consola">
+    <div class="dots"><span></span><span></span><span></span></div>
+    <div><span class="p">&gt;</span> pagina.buscar()</div>
+    <div class="err">Error 404: página no encontrada</div>
+    <div class="cm">// Todo programador ha visto este mensaje. Lo importante es el siguiente intento.</div>
+  </div>
+  <div class="quote" id="q" aria-live="polite">El error solo es la prueba de que lo intentaste.</div>
+  <div class="btns">
+    <a class="btn btn-a" id="bInicio" href="/"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>Volver al inicio</a>
+    <a class="btn btn-b" id="bCursos" href="/#cursos"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>Buscar cursos</a>
+  </div>
+</main>
+<script>
+(function(){
+  var a=document.getElementById("bInicio"),c=document.getElementById("bCursos");
+  function poner(base){a.href=base;c.href=base+"#cursos";}
+  var seg=location.pathname.split("/").filter(Boolean)[0];
+  var base=(seg&&seg.indexOf(".")<0)?"/"+seg+"/":"/";
+  poner(base);
+  if(base!=="/"){ // comprobar que esa carpeta es de verdad la raíz del sitio
+    fetch(base,{method:"HEAD"}).then(function(r){if(!r.ok)poner("/");}).catch(function(){poner("/");});
+  }
+})();
+</script>
+<script>
+(function(){
+  var F=["El error solo es la prueba de que lo intentaste.","Depurar también es programar.","Un error no es un fracaso: es el código enseñándote algo.","Todo programador ha visto cientos de errores en rojo. Así se aprende.","El código que hoy no funciona es el que mañana sabrás arreglar.","Si te equivocaste, ya sabes una forma más de hacerlo bien."];
+  var el=document.getElementById("q"),i=Math.floor(Math.random()*F.length);el.textContent=F[i];
+  if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  setInterval(function(){el.style.opacity=0;setTimeout(function(){i=(i+1)%F.length;el.textContent=F[i];el.style.opacity=1;},500);},6000);
+})();
+</script>
+</body>
+</html>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es" data-palette="rosa">
+<html lang="es" data-palette="formal">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Práctica de SQL desde cero · Glow STEM</title>
 <meta name="description" content="Aprende SQL desde cero escribiendo consultas reales en tu navegador: 14 módulos, ejercicios con pistas y una base de datos de práctica. Gratis y sin registrarte.">
-<script>(function(){var d=document.documentElement,q=location.search,p=null,m=null;try{p=localStorage.getItem("edutech-palette");m=localStorage.getItem("edutech-theme");}catch(e){}var a=q.match(/[?&]pal=(\w+)/),b=q.match(/[?&]modo=(\w+)/);if(a)p=a[1];if(b)m=b[1];if(!m&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)m="dark";if(p!=="original"&&p!=="formal")p="rosa";d.setAttribute("data-palette",p);if(m==="dark")d.setAttribute("data-theme","dark");var emb=false;try{emb=window.self!==window.top;}catch(e){emb=true;}if(emb||/[?&]embed=1/.test(q))d.className+=" embebido";})();</script>
+<script>(function(){var d=document.documentElement,q=location.search,p=null,m=null;try{p=localStorage.getItem("edutech-palette");m=localStorage.getItem("edutech-theme");}catch(e){}var a=q.match(/[?&]pal=(\w+)/),b=q.match(/[?&]modo=(\w+)/);if(a)p=a[1];if(b)m=b[1];if(!m&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)m="dark";if(p!=="original"&&p!=="rosa")p="formal";d.setAttribute("data-palette",p);if(m==="dark")d.setAttribute("data-theme","dark");var emb=false;try{emb=window.self!==window.top;}catch(e){emb=true;}if(emb||/[?&]embed=1/.test(q))d.className+=" embebido";})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
@@ -2370,7 +2370,7 @@ else iniciar();
 (function(){
   var d=document.documentElement;
   function aplicarTema(p,m){
-    if(p!=="original"&&p!=="formal")p="rosa";
+    if(p!=="original"&&p!=="rosa")p="formal";
     d.setAttribute("data-palette",p);
     if(m==="dark")d.setAttribute("data-theme","dark");else d.removeAttribute("data-theme");
   }

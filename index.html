@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("edutech-theme"),p=localStorage.getItem("edutech-palette");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))d.setAttribute("data-theme","dark");if(p!=="original"&&p!=="formal")p="rosa";d.setAttribute("data-palette",p==="original"?"original":p);}catch(e){d.setAttribute("data-palette","rosa");}})();</script>
+<script>(function(){var d=document.documentElement;try{var t=localStorage.getItem("edutech-theme"),p=localStorage.getItem("edutech-palette");if(t==="dark"||(!t&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches))d.setAttribute("data-theme","dark");if(p!=="original"&&p!=="rosa")p="formal";d.setAttribute("data-palette",p);}catch(e){d.setAttribute("data-palette","formal");}})();</script>
 <script>(function(){var h=(location.hash||"").slice(1).split("/")[0],M={inicio:"inicio",empieza:"inicio",quiz:"inicio",guia:"inicio","empezar-aqui":"inicio","recurso-del-dia":"inicio","cta-final":"inicio",sugerir:"inicio",explora:"inicio",practica:"practica",rutas:"rutas",recursos:"rutas",cursos:"cursos",buscador:"cursos",guias:"guias",progreso:"progreso","mi-progreso":"progreso",favoritos:"progreso",sobre:"sobre",proyecto:"sobre",faq:"sobre",dashboard:"sobre",stack:"sobre",curadora:"sobre"};document.documentElement.setAttribute("data-view",M[h]||"inicio");})();</script>
 <title>Glow STEM — Pierde el miedo y aprende datos y tecnología a tu ritmo | Por Milagros Espinoza</title>
 <meta name="description" content="Aprende datos y tecnología gratis y a tu ritmo: practica SQL aquí mismo, sigue rutas paso a paso, repasa con guías visuales o encuentra cursos con certificado. Hecho por Milagros Espinoza Cunya.">
@@ -1290,6 +1290,45 @@ html[data-view="inicio"] #viewH1{display:none}
 .ex-go{display:none}
 @media(max-width:760px){.ex-grid{grid-template-columns:1fr}.ex-t{font-size:25px}}
 @media(max-width:560px){.hero{padding-bottom:36px}.hero-quote{margin-top:28px;min-height:92px}.hq-text{font-size:22px}}
+
+/* La frase de apoyo del botón de la primera consulta */
+.fq-s{font-size:13.5px;line-height:1.5;color:rgba(var(--on-inv-rgb),0.78);margin-top:4px}
+[data-palette="rosa"]:not([data-theme="dark"]) .fq-s{color:#6E5262}
+@media(max-width:560px){.fq-s{font-size:13px}}
+
+/* Inicio: tres modos de estudio y la franja de cursos */
+.ex-grid{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){.ex-grid{grid-template-columns:1fr}}
+.cur-banda{display:flex;align-items:center;gap:clamp(20px,4vw,48px);margin-top:20px;padding:clamp(24px,3.4vw,34px);border-radius:20px;
+  text-decoration:none;color:var(--on-inv);background:var(--inv-bg);border:1px solid rgba(var(--inv-accent-rgb),0.25);
+  box-shadow:var(--shadow-md);transition:transform 0.2s ease,box-shadow 0.2s ease}
+.cur-banda:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.cur-banda:focus-visible{outline:3px solid var(--inv-accent);outline-offset:3px}
+.cb-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px}
+.cb-k{font-size:11px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--inv-hi)}
+.cb-t{font-family:var(--f-display);font-size:clamp(24px,3vw,34px);font-weight:600;line-height:1.15;color:var(--on-inv)}
+.cb-p{font-size:15px;line-height:1.6;color:rgba(var(--on-inv-rgb),0.78);max-width:62ch}
+.cb-logos{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.cb-logos i{font-style:normal;font-size:12px;font-weight:700;letter-spacing:0.02em;color:var(--inv-accent);
+  background:rgba(var(--inv-accent-rgb),0.12);border:1px solid rgba(var(--inv-accent-rgb),0.22);border-radius:8px;padding:4px 10px}
+.cb-side{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}
+.cb-n{font-family:var(--f-display);font-size:clamp(52px,7vw,76px);font-weight:600;line-height:1;color:var(--inv-hi2)}
+.cb-l{font-size:12.5px;font-weight:600;letter-spacing:0.04em;color:rgba(var(--on-inv-rgb),0.7)}
+.cb-l2{font-size:12px;font-weight:600;color:var(--inv-hi);margin-top:2px}
+.cb-cta{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:12px 22px;border-radius:12px;
+  background:var(--cta-bg);color:var(--on-cta);font-size:14.5px;font-weight:700;white-space:nowrap}
+.cb-cta svg{width:17px;height:17px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform 0.2s ease}
+.cur-banda:hover .cb-cta svg{transform:translateX(3px)}
+[data-palette="rosa"] .cur-banda{background:#FFF7FB;border-color:#F3D27C}
+[data-palette="rosa"]:not([data-theme="dark"]) .cb-logos i{color:#A8155F}
+[data-palette="rosa"]:not([data-theme="dark"]) .cb-l2{color:#8A6510}
+[data-palette="rosa"] .cb-cta{background:linear-gradient(135deg,#F7E2AE,#E8C06A);color:#4A3405}
+[data-palette="rosa"][data-theme="dark"] .cur-banda{background:#26151F;border-color:rgba(243,210,124,0.4)}
+@media(max-width:820px){.cur-banda{flex-direction:column;align-items:flex-start;gap:18px}
+  .cb-side{flex-direction:row;align-items:baseline;gap:10px;width:100%;flex-wrap:wrap}
+  .cb-l2{margin-top:0}
+  .cb-cta{margin-top:0;margin-left:auto}}
+@media(max-width:420px){.cb-cta{margin-left:0;width:100%;justify-content:center}}
 </style>
 </head>
 <body>
@@ -1335,9 +1374,9 @@ html[data-view="inicio"] #viewH1{display:none}
   <div class="pal-t" id="palT1">Colores</div>
   <div class="pal-opts" role="radiogroup" aria-labelledby="palT1">
     
-    <button type="button" class="pal-opt" role="radio" data-pal="rosa" aria-checked="false"><span class="pal-sw" aria-hidden="true"><i style="background:#FFFFFF"></i><i style="background:#AD3567"></i><i style="background:linear-gradient(135deg,#9A7212,#F3DD8C,#C9A227)"></i></span><span class="pal-txt"><strong>Rosa y dorado</strong><small>Blanco, rosa y brillo dorado · predeterminada</small></span><svg class="pal-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></button>
-    <button type="button" class="pal-opt" role="radio" data-pal="original" aria-checked="true"><span class="pal-sw" aria-hidden="true"><i style="background:#FAF6F0"></i><i style="background:#15383A"></i><i style="background:#C9807A"></i></span><span class="pal-txt"><strong>Original</strong><small>Verde azulado y rosa seco</small></span><svg class="pal-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></button>
-    <button type="button" class="pal-opt" role="radio" data-pal="formal" aria-checked="false"><span class="pal-sw" aria-hidden="true"><i style="background:#F6F7F9"></i><i style="background:#1F3A5F"></i><i style="background:#9B2C3B"></i></span><span class="pal-txt"><strong>Formal</strong><small>Azul marino y gris</small></span><svg class="pal-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></button>
+    <button type="button" class="pal-opt" role="radio" data-pal="formal" aria-checked="false"><span class="pal-sw" aria-hidden="true"><i style="background:#F6F7F9"></i><i style="background:#1F3A5F"></i><i style="background:#9B2C3B"></i></span><span class="pal-txt"><strong>Foco</strong><small>Azul marino y gris · predeterminada</small></span><svg class="pal-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></button>
+    <button type="button" class="pal-opt" role="radio" data-pal="original" aria-checked="true"><span class="pal-sw" aria-hidden="true"><i style="background:#FAF6F0"></i><i style="background:#15383A"></i><i style="background:#C9807A"></i></span><span class="pal-txt"><strong>Calma</strong><small>Verde azulado y rosa seco</small></span><svg class="pal-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></button>
+    <button type="button" class="pal-opt" role="radio" data-pal="rosa" aria-checked="false"><span class="pal-sw" aria-hidden="true"><i style="background:#FFFFFF"></i><i style="background:#AD3567"></i><i style="background:linear-gradient(135deg,#9A7212,#F3DD8C,#C9A227)"></i></span><span class="pal-txt"><strong>Destello</strong><small>Blanco, rosa y brillo dorado</small></span><svg class="pal-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></button>
   </div>
   <div class="pal-t" id="palT2">Modo</div>
   <div class="pal-seg" role="radiogroup" aria-labelledby="palT2">
@@ -1357,8 +1396,7 @@ html[data-view="inicio"] #viewH1{display:none}
   <div class="mm-group-t">Tu espacio</div>
       <a class="mm-link" href="#progreso" data-view-link="progreso"><span class="mm-ico"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span><span class="mm-txt">Mi progreso<span class="mm-sub">Racha, avance e insignias</span></span><span class="mm-count" id="mmProgCount"></span></a>
       <a class="mm-link" href="#favoritos" data-mm-fav="1"><span class="mm-ico"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></span><span class="mm-txt">Mis favoritos<span class="mm-sub">Cursos que guardaste</span></span><span class="mm-count" id="mmFavCount"></span></a>
-  <div class="mm-group-t">Comunidad</div>
-      <a class="mm-link" href="#sugerir"><span class="mm-ico"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span><span class="mm-txt">Sugerir un curso<span class="mm-sub">Ayuda a que la página crezca</span></span></a>
+  <div class="mm-group-t">El proyecto</div>
       <a class="mm-link" href="#sobre" data-view-link="sobre"><span class="mm-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span><span class="mm-txt">Sobre el proyecto<span class="mm-sub">Cómo se construyó</span></span></a>
       <a class="mm-link" href="#faq"><span class="mm-ico"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><span class="mm-txt">Preguntas frecuentes<span class="mm-sub">Certificados, idioma y más</span></span></a>
   <a class="mm-cta" href="#practica/m1">Haz tu primera consulta <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
@@ -1372,11 +1410,11 @@ html[data-view="inicio"] #viewH1{display:none}
   <div class="hero-grid-bg"></div>
   <div class="hero-inner">
     <h1 class="hero-h1">Pierde el miedo<br><span class="accent">y empieza a tu ritmo</span></h1>
-    <p class="hero-lead">Aprende datos y tecnología gratis, paso a paso: practica aquí mismo, sigue una ruta, repasa con guías o encuentra cursos con certificado.</p>
+    <p class="hero-lead">Aprende datos y tecnología gratis y a tu ritmo.</p>
     <p class="hero-dream">Para ti, que sueñas con ser parte de este mundo aunque a veces la duda te frene: aquí encontrarás tu propio camino, elegido por ti, para que no te rindas y cumplas tus sueños.</p>
     <a href="#practica/m1" class="fq" aria-label="¿Nunca escribiste código? Haz tu primera consulta en 1 minuto">
       <span class="fq-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></span>
-      <span class="fq-txt"><span class="fq-t">¿Nunca escribiste código? Haz tu primera consulta en 1 minuto</span><code class="fq-code" aria-hidden="true">SELECT nombre FROM clientes;<i class="fq-caret"></i></code></span>
+      <span class="fq-txt"><span class="fq-t">¿Nunca escribiste código? Haz tu primera consulta en 1 minuto</span><span class="fq-s">Sin instalar nada y sin crear cuenta: escribes SQL de verdad y ves la tabla de resultados al instante, igual que en el trabajo. Desde tu compu o tu celular.</span><code class="fq-code" aria-hidden="true">SELECT nombre FROM clientes;<i class="fq-caret"></i></code></span>
       <span class="fq-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
     </a>
     <div class="hero-quote" aria-live="polite">
@@ -1402,18 +1440,33 @@ html[data-view="inicio"] #viewH1{display:none}
       <p class="sec-lead">Por eso aquí encontrarás distintos modos de estudio. Elige el que sientas que más te ayuda a aprender: lo importante no es ir rápido, es empezar y no rendirte.</p>
     </div>
     <div class="ex-grid fi">
-      <a class="ex-card" href="#practica"><span class="ex-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></span><span class="ex-k">Aprende haciendo</span><span class="ex-t">Práctica</span><p>Para ti si sientes que necesitas empezar desde cero: textos breves, ejemplos y ejercicios cortitos que resuelves aquí mismo para asimilar lo que acabas de aprender.</p><span class="ex-meta">SQL ya disponible · Python y Excel muy pronto</span><span class="ex-cta">Ir a practicar <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
+      <a class="ex-card" href="#practica"><span class="ex-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 17l6-6-6-6M12 19h8"/></svg></span><span class="ex-k">Aprende haciendo</span><span class="ex-t">Práctica</span><p>Para ti si sientes que necesitas empezar desde cero: textos breves, ejemplos y ejercicios cortitos que resuelves aquí mismo para asimilar lo que acabas de aprender. <strong>Sin instalar nada y sin crear cuenta</strong>: escribes consultas de verdad y ves el resultado al instante, igual que en el trabajo, desde la compu o el celular.</p><span class="ex-meta">SQL ya disponible · Python y Excel muy pronto</span><span class="ex-cta">Ir a practicar <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
       <a class="ex-card" href="#rutas"><span class="ex-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3v12M6 21a3 3 0 100-6 3 3 0 000 6zM18 9a3 3 0 100-6 3 3 0 000 6zM18 9v6a3 3 0 01-3 3H9"/></svg></span><span class="ex-k">Aprende a fondo</span><span class="ex-t">Rutas</span><p>Para ti si quieres entender la teoría con calma: videos y fuentes de distintos autores, en orden, con checkpoints para comprobar lo aprendido. Ideal si ya tienes algo de base, aunque también puedes empezar de cero.</p><span class="ex-meta">9 rutas guiadas paso a paso</span><span class="ex-cta">Ver las rutas <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
       <a class="ex-card" href="#guias"><span class="ex-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></span><span class="ex-k">Repasa rápido</span><span class="ex-t">Guías</span><p>Resúmenes visuales de cada parte. No son para memorizar: úsalas cuando dejaste de estudiar un tiempo y quieres refrescar lo aprendido, así tu cerebro sigue entrenando.</p><span class="ex-meta">9 guías en PDF</span><span class="ex-cta">Ver las guías <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
-      <a class="ex-card" href="#cursos"><span class="ex-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.48 12.89L17 22l-5-3-5 3 1.52-9.11"/></svg></span><span class="ex-k">Certifícate</span><span class="ex-t">Cursos</span><p>Cursos gratis de universidades y empresas como MIT, Harvard, Google o IBM, muchos con certificado, para sumar a tu CV y a tu LinkedIn.</p><span class="ex-meta">242 cursos · 224 con certificado</span><span class="ex-cta">Buscar cursos <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a>
     </div>
+    <a class="cur-banda fi" href="#cursos">
+      <span class="cb-main">
+        <span class="cb-k">Certifícate</span>
+        <span class="cb-t">Cursos gratis de universidades y empresas de primer nivel</span>
+        <p class="cb-p">Reunidos y revisados uno por uno para que no pierdas tiempo buscando. Filtra por tema, idioma o duración y empieza el que te sirva.</p>
+        <span class="cb-logos" aria-label="Algunas de las 28 entidades">
+          <i>MIT</i><i>Harvard</i><i>Google</i><i>IBM</i><i>Cisco</i><i>Kaggle</i><i>freeCodeCamp</i><i>y 21 más</i>
+        </span>
+      </span>
+      <span class="cb-side">
+        <span class="cb-n">242</span>
+        <span class="cb-l">cursos gratuitos</span>
+        <span class="cb-l2">224 con certificado</span>
+        <span class="cb-cta">Buscar cursos <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+      </span>
+    </a>
   </div>
 </section>
 
 <!-- ===== PRÁCTICA (laboratorio interactivo) ===== -->
 <section id="practica" data-view="practica" aria-labelledby="prT">
   <div class="pr-bar">
-    <div class="pr-head"><h2 class="pr-t view-h" id="prT" tabindex="-1">Práctica</h2><span class="pr-sub">Escribe, ejecuta y aprende. Tu avance se guarda en este navegador.</span></div>
+    <div class="pr-head"><h2 class="pr-t view-h" id="prT" tabindex="-1">Práctica</h2><span class="pr-sub">Sin instalar nada: escribes SQL de verdad y ves el resultado al instante, igual que en el trabajo.</span></div>
     <div class="pr-langs" aria-label="Lenguajes para practicar">
       <span class="pr-lang is-on" aria-current="true">SQL</span>
       <button type="button" class="pr-lang is-soon" data-soon="Python">Python <small><span class="pr-long">Próximamente</span><span class="pr-short">Pronto</span></small></button>
@@ -1745,16 +1798,6 @@ html[data-view="inicio"] #viewH1{display:none}
       <a href="https://whatsapp.com/channel/0029VbBV1Ij8aKvR50k8Wc2L" target="_blank" rel="noopener" class="btn-ghost"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 01-8 8H7l-4 2 1-4a8 8 0 014-12 8 8 0 0113 6z"/></svg> Únete a la comunidad</a>
     </div>
   </div>
-  <div class="sug-wrap"><div class="sug-box fi" id="sugerir">
-      <div class="sug-content">
-        <div class="sug-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
-        <div>
-          <div class="sug-title">¿Conoces un curso que no está aquí?</div>
-          <div class="sug-desc">Ayúdanos a crecer: cuéntanos cuál es y lo sumaremos para toda la comunidad.</div>
-        </div>
-      </div>
-      <a href="FORMULARIO_SUGERENCIAS_AQUI" target="_blank" rel="noopener" class="sug-btn">Sugerir un curso <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
-    </div></div>
 </section>
 
 <!-- FOOTER -->
@@ -3283,7 +3326,7 @@ function removeFav(btn,ev){
 
 // ===== APARIENCIA: paleta de colores + modo día/noche =====
 const themeToggle=document.getElementById("themeToggle");
-function getPalette(){var p=document.documentElement.getAttribute("data-palette");return p==="rosa"||p==="formal"?p:"original";}
+function getPalette(){var p=document.documentElement.getAttribute("data-palette");return p==="rosa"||p==="original"?p:"formal";}
 function getMode(){return document.documentElement.getAttribute("data-theme")==="dark"?"dark":"light";}
 function syncAppearanceUI(){
   var p=getPalette(),m=getMode();
@@ -3293,7 +3336,7 @@ function syncAppearanceUI(){
 }
 function setPalette(p){
   var d=document.documentElement;
-  if(p!=="rosa"&&p!=="formal")p="original";d.setAttribute("data-palette",p);
+  if(p!=="rosa"&&p!=="original")p="formal";d.setAttribute("data-palette",p);
   try{localStorage.setItem("edutech-palette",p);}catch(e){}
   syncAppearanceUI();if(typeof labSyncTheme==="function")labSyncTheme();
 }
@@ -3504,6 +3547,13 @@ function fallbackCopy(t,msg){
 }
 
 // ---------- Insignia para LinkedIn (canvas) ----------
+// La insignia se comparte fuera de la página, así que siempre usa los colores de Foco
+var BD_C={fondo1:"#0B1222",fondo2:"#14213D",fondo3:"#24406B",brillo1:"rgba(59,123,200,0.30)",brillo2:"rgba(230,201,138,0.18)",
+  rejilla:"rgba(184,201,224,0.05)",borde:"rgba(184,201,224,0.20)",marca:"#E6C98A",tenue:"rgba(184,201,224,0.72)",
+  rayoA:"rgba(184,201,224,0.25)",rayoB:"rgba(230,201,138,0.5)",aroA:"#3B7BC8",aroB:"#E6C98A",discoA:"#24406B",discoB:"#0D1629",
+  punteado:"rgba(184,201,224,0.25)",texto:"#F5F7FA",puntoOn:"#E6C98A",puntoOff:"rgba(184,201,224,0.22)",
+  pastilla:"#9B2C3B",pastillaTxt:"#FFFFFF",frase:"rgba(245,247,250,0.9)",temaA:"#8FB8E8",temaB:"#E6C98A",
+  linea:"rgba(184,201,224,0.35)",dato:"rgba(184,201,224,0.82)",nota:"rgba(184,201,224,0.6)"};
 var BADGE_L1=["","Comencé la ruta de","Completé el nivel Básico de","Completé el nivel Intermedio de","Completé el nivel Avanzado de"];
 var BADGE_PILL=["","RUTA INICIADA","NIVEL BÁSICO","NIVEL INTERMEDIO","NIVEL AVANZADO"];
 var BADGE_TAG={"SQL":"SQL","Excel":"Excel","Python":"Python","Power BI":"PowerBI","Estadística":"Estadistica","Machine Learning":"MachineLearning","Git & GitHub":"GitHub","R":"RStats","Tableau":"Tableau"};
@@ -3535,38 +3585,38 @@ function drawBadge(){
   return fontsP.then(function(){
     var c=cv.getContext("2d");var W=1080,H=1080,cx=W/2,cy=400;
     c.clearRect(0,0,W,H);c.textAlign="center";c.textBaseline="alphabetic";bdLS(c,"0px");
-    var g=c.createLinearGradient(0,0,W,H);g.addColorStop(0,"#0B2224");g.addColorStop(0.55,"#15383A");g.addColorStop(1,"#1A5556");
+    var g=c.createLinearGradient(0,0,W,H);g.addColorStop(0,BD_C.fondo1);g.addColorStop(0.55,BD_C.fondo2);g.addColorStop(1,BD_C.fondo3);
     c.fillStyle=g;c.fillRect(0,0,W,H);
     var glow=function(x,y,r,col){var gr=c.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,col);gr.addColorStop(1,"rgba(0,0,0,0)");c.fillStyle=gr;c.fillRect(0,0,W,H);};
-    glow(900,150,480,"rgba(63,184,184,0.28)");glow(140,960,520,"rgba(201,128,122,0.22)");
-    c.strokeStyle="rgba(178,218,218,0.05)";c.lineWidth=1;
+    glow(900,150,480,BD_C.brillo1);glow(140,960,520,BD_C.brillo2);
+    c.strokeStyle=BD_C.rejilla;c.lineWidth=1;
     for(var x=0;x<=W;x+=54){c.beginPath();c.moveTo(x,0);c.lineTo(x,H);c.stroke();}
     for(var y=0;y<=H;y+=54){c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke();}
-    c.strokeStyle="rgba(178,218,218,0.18)";c.lineWidth=2;bdRound(c,40,40,W-80,H-80,36);c.stroke();
-    c.fillStyle="#E8B4B0";c.font='700 22px "DM Sans", sans-serif';bdLS(c,"6px");c.fillText(BRAND_NAME.toUpperCase(),cx,112);
-    c.fillStyle="rgba(178,218,218,0.7)";c.font='600 17px "DM Sans", sans-serif';bdLS(c,"4px");c.fillText("INSIGNIA DE PROGRESO",cx,144);bdLS(c,"0px");
-    for(var i=0;i<24;i++){if(i>=5&&i<=7)continue;var a=i/24*Math.PI*2;var r1=205,r2=i%2?222:234;c.strokeStyle=i%2?"rgba(178,218,218,0.25)":"rgba(232,180,176,0.5)";c.lineWidth=3;c.beginPath();c.moveTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);c.lineTo(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2);c.stroke();}
-    var ring=c.createLinearGradient(cx-190,cy-190,cx+190,cy+190);ring.addColorStop(0,"#3FB8B8");ring.addColorStop(1,"#E8B4B0");
+    c.strokeStyle=BD_C.borde;c.lineWidth=2;bdRound(c,40,40,W-80,H-80,36);c.stroke();
+    c.fillStyle=BD_C.marca;c.font='700 22px "DM Sans", sans-serif';bdLS(c,"6px");c.fillText(BRAND_NAME.toUpperCase(),cx,112);
+    c.fillStyle=BD_C.tenue;c.font='600 17px "DM Sans", sans-serif';bdLS(c,"4px");c.fillText("INSIGNIA DE PROGRESO",cx,144);bdLS(c,"0px");
+    for(var i=0;i<24;i++){if(i>=5&&i<=7)continue;var a=i/24*Math.PI*2;var r1=205,r2=i%2?222:234;c.strokeStyle=i%2?BD_C.rayoA:BD_C.rayoB;c.lineWidth=3;c.beginPath();c.moveTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);c.lineTo(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2);c.stroke();}
+    var ring=c.createLinearGradient(cx-190,cy-190,cx+190,cy+190);ring.addColorStop(0,BD_C.aroA);ring.addColorStop(1,BD_C.aroB);
     c.beginPath();c.arc(cx,cy,190,0,Math.PI*2);c.fillStyle=ring;c.fill();
-    var inner=c.createRadialGradient(cx,cy-60,20,cx,cy,172);inner.addColorStop(0,"#1F4A4C");inner.addColorStop(1,"#102B2D");
+    var inner=c.createRadialGradient(cx,cy-60,20,cx,cy,172);inner.addColorStop(0,BD_C.discoA);inner.addColorStop(1,BD_C.discoB);
     c.beginPath();c.arc(cx,cy,172,0,Math.PI*2);c.fillStyle=inner;c.fill();
-    c.beginPath();c.arc(cx,cy,150,0,Math.PI*2);c.strokeStyle="rgba(178,218,218,0.25)";c.lineWidth=2;c.setLineDash([4,8]);c.stroke();c.setLineDash([]);
+    c.beginPath();c.arc(cx,cy,150,0,Math.PI*2);c.strokeStyle=BD_C.punteado;c.lineWidth=2;c.setLineDash([4,8]);c.stroke();c.setLineDash([]);
     var ab=TEMA_ABBR[tema]||tema.substring(0,3).toUpperCase();
-    c.fillStyle="#FAF6F0";c.font='600 '+(ab.length>=3?108:132)+'px "Cormorant Garamond", serif';c.textBaseline="middle";c.fillText(ab,cx,cy-20);
-    for(var k=1;k<=4;k++){c.beginPath();c.arc(cx+(k-2.5)*34,cy+70,9,0,Math.PI*2);c.fillStyle=k<=rank?"#E8B4B0":"rgba(178,218,218,0.22)";c.fill();}
+    c.fillStyle=BD_C.texto;c.font='600 '+(ab.length>=3?108:132)+'px "Cormorant Garamond", serif';c.textBaseline="middle";c.fillText(ab,cx,cy-20);
+    for(var k=1;k<=4;k++){c.beginPath();c.arc(cx+(k-2.5)*34,cy+70,9,0,Math.PI*2);c.fillStyle=k<=rank?BD_C.puntoOn:BD_C.puntoOff;c.fill();}
     c.textBaseline="alphabetic";
     var pill=BADGE_PILL[rank];c.font='700 22px "DM Sans", sans-serif';bdLS(c,"3px");
-    var pw=c.measureText(pill).width+64;bdRound(c,cx-pw/2,cy+168,pw,54,27);c.fillStyle="#C9807A";c.fill();
-    c.fillStyle="#FFFFFF";c.fillText(pill,cx,cy+203);bdLS(c,"0px");
-    c.fillStyle="rgba(250,246,240,0.88)";bdFit(c,BADGE_L1[rank],'500 SZpx "Cormorant Garamond", serif',50,900);c.fillText(BADGE_L1[rank],cx,700);
-    var tg=c.createLinearGradient(cx-260,0,cx+260,0);tg.addColorStop(0,"#3FB8B8");tg.addColorStop(1,"#E8B4B0");
+    var pw=c.measureText(pill).width+64;bdRound(c,cx-pw/2,cy+168,pw,54,27);c.fillStyle=BD_C.pastilla;c.fill();
+    c.fillStyle=BD_C.pastillaTxt;c.fillText(pill,cx,cy+203);bdLS(c,"0px");
+    c.fillStyle=BD_C.frase;bdFit(c,BADGE_L1[rank],'500 SZpx "Cormorant Garamond", serif',50,900);c.fillText(BADGE_L1[rank],cx,700);
+    var tg=c.createLinearGradient(cx-260,0,cx+260,0);tg.addColorStop(0,BD_C.temaA);tg.addColorStop(1,BD_C.temaB);
     c.fillStyle=tg;bdFit(c,tema,'italic 400 SZpx "Cormorant Garamond", serif',96,920);c.fillText(tema,cx,792);
-    c.strokeStyle="rgba(178,218,218,0.35)";c.lineWidth=2;c.beginPath();c.moveTo(cx-60,832);c.lineTo(cx+60,832);c.stroke();
+    c.strokeStyle=BD_C.linea;c.lineWidth=2;c.beginPath();c.moveTo(cx-60,832);c.lineTo(cx+60,832);c.stroke();
     var nm=(document.getElementById("bdName").value||"").trim()||"Tu nombre";
-    c.fillStyle="#FAF6F0";bdFit(c,nm,'700 SZpx "DM Sans", sans-serif',40,880);c.fillText(nm,cx,886);
+    c.fillStyle=BD_C.texto;bdFit(c,nm,'700 SZpx "DM Sans", sans-serif',40,880);c.fillText(nm,cx,886);
     var s=temaStats(tema);var fecha=new Date().toLocaleDateString("es-PE",{day:"numeric",month:"long",year:"numeric"});
-    c.fillStyle="rgba(178,218,218,0.8)";c.font='400 23px "DM Sans", sans-serif';c.fillText(s.done+" de "+s.total+" recursos completados  ·  "+fecha,cx,930);
-    c.fillStyle="rgba(178,218,218,0.5)";c.font='400 17px "DM Sans", sans-serif';c.fillText("Insignia simbólica de progreso personal · No es un certificado oficial",cx,1002);
+    c.fillStyle=BD_C.dato;c.font='400 23px "DM Sans", sans-serif';c.fillText(s.done+" de "+s.total+" recursos completados  ·  "+fecha,cx,930);
+    c.fillStyle=BD_C.nota;c.font='400 17px "DM Sans", sans-serif';c.fillText("Insignia simbólica de progreso personal · No es un certificado oficial",cx,1002);
   });
 }
 function badgeText(){
@@ -3684,10 +3734,6 @@ function syncQuickChips(){
     qc.addEventListener("click",function(){fCert=!fCert;currentPage=1;syncQuickChips();applyFilters();});
     qe.addEventListener("click",function(){activeCourseLang=activeCourseLang==="Español"?"":"Español";document.getElementById("sLangCourse").value=activeCourseLang;currentPage=1;syncQuickChips();applyFilters();});
   }
-  // Formulario de sugerencias aún sin enlace: avisar en vez de abrir un link roto
-  document.querySelectorAll('a[href*="FORMULARIO_SUGERENCIAS_AQUI"]').forEach(function(a){
-    a.addEventListener("click",function(e){e.preventDefault();showToast("El formulario de sugerencias estará disponible muy pronto");});
-  });
   syncQuickChips();
 })();
 

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Glow STEM">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3B7BC8"/><stop offset="1" stop-color="#1F3A5F"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#g)"/>
+  <g fill="none" stroke="#F5F7FA" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M55 26L32 15 9 26l23 11 23-11z"/>
+    <path d="M18 31v11c0 2.4 5.8 7 14 7s14-4.6 14-7V31"/>
+  </g>
+</svg>

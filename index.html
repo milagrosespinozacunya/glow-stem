@@ -218,7 +218,7 @@ section{padding:clamp(60px,8vw,96px) clamp(20px,4vw,52px)}
 
 /* ===== BUSCADOR ===== */
 #buscador{background:linear-gradient(180deg,var(--crema) 0%,var(--crema-2) 100%);padding-top:clamp(50px,7vw,80px)}
-.search-panel{background:var(--blanco);border:1px solid rgba(var(--ink-rgb),0.07);border-radius:24px;padding:clamp(20px,3vw,32px);box-shadow:var(--shadow-lg);margin-bottom:28px;position:sticky;top:80px;z-index:50}
+.search-panel{background:var(--blanco);border:1px solid rgba(var(--ink-rgb),0.07);border-radius:24px;padding:clamp(20px,3vw,32px);box-shadow:var(--shadow-lg);margin-bottom:28px;position:relative;z-index:50}
 .search-main{margin-bottom:12px}
 .search-box{flex:1;min-width:240px;position:relative;display:flex;align-items:center}
 .search-icon{position:absolute;left:18px;width:18px;height:18px;pointer-events:none;color:var(--ink-faint);stroke:currentColor;stroke-width:2;fill:none}
@@ -307,7 +307,7 @@ section{padding:clamp(60px,8vw,96px) clamp(20px,4vw,52px)}
 .mstep-tool{display:inline-block;font-size:11px;font-weight:600;background:rgba(var(--rosa-rgb),0.18);color:var(--inv-hi2);padding:4px 12px;border-radius:20px;letter-spacing:0.02em}
 
 .paises-box{background:rgba(var(--on-inv-rgb),0.04);border:1px solid rgba(var(--inv-accent-rgb),0.13);border-radius:20px;padding:28px;margin-top:24px;backdrop-filter:blur(10px)}
-.paises-title{font-size:11px;font-weight:600;color:var(--inv-hi2);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:18px;text-align:center}
+.paises-title{font-size:11px;font-weight:600;color:var(--inv-hi2);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:18px;text-align:center}.paises-h{font-family:var(--f-display);font-size:clamp(19px,2.3vw,25px);font-weight:600;color:var(--on-inv);text-align:center;margin-bottom:12px;line-height:1.25}.paises-p{font-size:15px;line-height:1.7;color:rgba(var(--on-inv-rgb),0.82);text-align:center;max-width:60ch;margin:0 auto 22px}.paises-p strong{color:var(--inv-hi2);font-weight:600}.paises-box .paises-title{margin-bottom:14px}@media (max-width:640px){.paises-p{font-size:14px;text-align:left}}
 .paises-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .pc{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:500;padding:8px 16px;border-radius:30px;background:rgba(var(--on-inv-rgb),0.06);border:1px solid rgba(var(--inv-accent-rgb),0.14);color:var(--on-inv);transition:all 0.2s}
 .pc:hover{background:rgba(var(--bright-rgb),0.15);transform:translateY(-2px)}
@@ -1780,7 +1780,7 @@ button.arm-c:hover{border-color:var(--teal);transform:translateY(-2px)}
       <div class="mstep"><div class="mstep-num">04</div><div class="mstep-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg></div><div class="mstep-t">Analítica BI</div><div class="mstep-d">Dashboard en Power BI que analiza la demanda educativa, perfiles, países y dedicación semanal al estudio.</div><span class="mstep-tool">Power BI · DAX</span></div>
     </div>
       <div class="paises-box fi">
-      <div class="paises-title">Estudiantes en 21 países</div>
+      <div class="paises-h">De una hoja de Excel a esta página</div><p class="paises-p">Glow STEM empezó siendo <strong>una sola hoja de Excel</strong> que armaba en mis ratos libres y mandaba por correo a quien me la pidiera. En su <strong>primer mes</strong> ya la estaban usando estudiantes de <strong>21 países</strong>, y ahí entendí que esto le servía a mucha más gente de la que imaginaba. De esa hoja, y de bastante trabajo después, salió la página que estás viendo.</p><div class="paises-title">De dónde llegaron ese primer mes</div>
       <div class="paises-row">
         <div class="pc">Perú <span class="pc-pct">62.4%</span></div>
         <div class="pc">Otros <span class="pc-pct">18.4%</span></div>

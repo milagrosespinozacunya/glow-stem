@@ -19,7 +19,7 @@
 <meta property="og:image:alt" content="Glow STEM: pierde el miedo y empieza a tu ritmo. Práctica interactiva, 9 rutas guiadas, 242 cursos gratis y 14 guías en PDF.">
 <meta name="twitter:image" content="https://milagrosespinozacunya.github.io/glow-stem/og.png">
 <meta name="twitter:title" content="Glow STEM — Pierde el miedo y empieza a tu ritmo">
-<meta name="twitter:description" content="Practica SQL en tu navegador sin instalar nada, sigue rutas paso a paso, repasa con guías visuales y encuentra cursos gratis con certificado.">
+<meta name="twitter:description" content="Aprende datos y tecnología a tu ritmo. Escribe SQL de verdad en tu navegador, sin instalar nada ni crear cuenta.">
 <meta name="author" content="Milagros Espinoza Cunya">
 <meta name="theme-color" content="#14213D">
 <script type="application/ld+json">
@@ -39,10 +39,10 @@
  "founder":{"@id":"https://milagrosespinozacunya.github.io/glow-stem/#autora"},"areaServed":"Latinoamérica","isAccessibleForFree":true}
 ]}
 </script>
-<title>Glow STEM — Pierde el miedo y aprende datos y tecnología a tu ritmo | Por Milagros Espinoza</title>
-<meta name="description" content="Aprende datos y tecnología gratis y a tu ritmo: practica SQL aquí mismo, sigue rutas paso a paso, repasa con guías visuales o encuentra cursos con certificado. Hecho por Milagros Espinoza Cunya.">
+<title>Glow STEM — Aprende datos y tecnología a tu ritmo</title>
+<meta name="description" content="Aprende datos y tecnología a tu ritmo. Escribe SQL de verdad en tu navegador, sin instalar nada ni crear cuenta. Rutas paso a paso, guías visuales y 242 cursos gratis con certificado. Hecho por Milagros Espinoza Cunya.">
 <meta property="og:title" content="Glow STEM — Pierde el miedo y empieza a tu ritmo">
-<meta property="og:description" content="Practica SQL desde cero en tu navegador, sigue 9 rutas guiadas (SQL, Excel, Python, Power BI, Estadística y más), repasa con guías visuales o encuentra cursos gratis con certificado. Hecho por Milagros Espinoza Cunya.">
+<meta property="og:description" content="Aprende datos y tecnología a tu ritmo. Escribe SQL de verdad en tu navegador, sin instalar nada ni crear cuenta.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="author" content="Milagros Espinoza Cunya">
@@ -1415,6 +1415,17 @@ button.arm-c:hover{border-color:var(--teal);transform:translateY(-2px)}
   color:var(--heading)!important;text-align:center;margin:28px auto 0!important;max-width:46ch;text-wrap:balance}
 @media(max-width:560px){.pq-txt{margin-top:20px}}
 </style>
+<!-- Medición de uso: sin cookies, sin datos personales, sin identificar a nadie.
+     Pega entre las comillas tu código de GoatCounter (el que te dan al registrarte). -->
+<script>
+window.GLOW_MEDICION="glowstem";
+(function(){var c=window.GLOW_MEDICION;if(!c)return;
+  var e=document.createElement("script");e.async=true;e.src="//gc.zgo.at/count.js";
+  e.setAttribute("data-goatcounter","https://"+c+".goatcounter.com/count");
+  document.head.appendChild(e);})();
+function glowEvento(n){try{if(window.goatcounter&&window.goatcounter.count)
+  window.goatcounter.count({path:n,title:n,event:true});}catch(e){}}
+</script>
 </head>
 <body>
 <div class="progress-bar" id="progressBar"></div>
@@ -2168,6 +2179,9 @@ function svg(o){
     if(e.chispas)interior+=chispas();
   }
   if(acc.amigo&&ACC[acc.amigo]&&e.tipo!=="dormida")fuera+=ACC[acc.amigo].svg();
+  /* el segundo acompañante va al otro lado, volteado para que mire hacia afuera */
+  if(acc.amigo2&&ACC[acc.amigo2]&&acc.amigo2!==acc.amigo&&e.tipo!=="dormida")
+    fuera+='<g transform="translate(72,0) scale(-1,1)">'+ACC[acc.amigo2].svg()+'</g>';
   var g='<g transform="translate(36,72) scale('+e.k+') translate(-36,-72)">'+interior+'</g>'+fuera;
   var w=o.w||120, alt=o.alt||("Tu ranita: "+nombreEtapa(dia));
   return '<svg class="rana-svg" viewBox="-10 -6 92 86" width="'+w+'" height="'+Math.round(w*86/92)+'" role="img" aria-label="'+alt+'">'+g+'</svg>';
@@ -3245,6 +3259,7 @@ function renderGuias(){
 var gvState={id:null,pg:1,opener:null};
 function openGuia(id,opener){
   var g=GUIA_IDX[id];var dlg=document.getElementById("gvViewer");if(!g||!dlg)return;
+  glowEvento("guia-abierta");
   gvState.id=id;gvState.pg=1;if(opener)gvState.opener=opener;
   document.getElementById("gvKicker").textContent=g.serie.nombre+" · Parte "+g.parte.n;
   document.getElementById("gvTitle").textContent=g.parte.titulo;
@@ -4009,6 +4024,7 @@ function initBadge(){
   name.addEventListener("input",function(){lsSet("edutech-name",name.value);clearTimeout(tmr);tmr=setTimeout(drawBadge,200);});
   document.getElementById("bdTema").addEventListener("change",drawBadge);
   document.getElementById("bdDownload").addEventListener("click",function(){
+    glowEvento("constancia-descargada");
     drawBadge().then(function(){
       var cv=document.getElementById("bdCanvas");var tema=document.getElementById("bdTema").value;
       var slug=tema.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-");
@@ -4143,6 +4159,7 @@ function setActiveNav(v){
 function showView(v,o){
   o=o||{};
   if(VIEWS.indexOf(v)<0)v="inicio";
+  if(v==="practica")glowEvento("practica-abierta");
   var d=document.documentElement,prev=d.getAttribute("data-view");
   if(o.push!==false&&prev){try{history.replaceState({v:prev,y:window.scrollY},"");}catch(e){}}
   d.setAttribute("data-view",v);
@@ -4211,6 +4228,7 @@ function labOpen(mod){
 window.addEventListener("message",function(e){
   var f=document.getElementById("prFrame");if(!f||e.source!==f.contentWindow)return;
   var m=e.data||{};
+  if(m.tipo==="edutech:evento"&&m.nombre){glowEvento(m.nombre);return;}
   if(m.tipo==="edutech:lab-listo"){var l=document.getElementById("prLoading");if(l)l.hidden=true;labMsg(labThemeMsg());}
   else if(m.tipo==="edutech:sql-progreso"&&m.datos){var ant=lsGet("edutech-practica-sql",null);lsSet("edutech-practica-sql",m.datos);
     if(m.datos.hechos&&(!ant||m.datos.hechos>(ant.hechos||0)))logActivity();
@@ -4261,7 +4279,7 @@ function ranaRender(){
   var el=document.getElementById("ranaPanel");if(!el)return;
   var e=RANA.estado(),acc=e.puestas||{},tiene=e.piezas||[];
   var LOCK='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>';
-  var SLOTS=[["cabeza","En la cabeza"],["cara","En la cara"],["ropa","Ropa"],["amigo","Compañía"]];
+  var SLOTS=[["cabeza","En la cabeza"],["cara","En la cara"],["ropa","Ropa"],["amigo","A su izquierda"],["amigo2","A su derecha"]];
   var h='<div class="rana-top">'+
     '<div class="rana-escena">'+RANA.svg({dia:e.dia,acc:acc,w:150})+'</div>'+
     '<div class="rana-info">'+
@@ -4272,11 +4290,12 @@ function ranaRender(){
       (e.mejor>e.dia?'<p class="rana-m">Tu mejor racha: <strong>'+e.mejor+' día'+(e.mejor===1?'':'s')+'</strong></p>':'')+
     '</div></div>';
   h+='<div class="arm"><div class="arm-h"><div class="arm-t">Su armario</div>'+
-     '<div class="arm-s">Las piezas se ganan practicando, siguiendo rutas, leyendo guías o manteniendo la racha. Una de cada tipo a la vez.</div></div>';
+     '<div class="arm-s">Las piezas se ganan practicando, siguiendo rutas, leyendo guías o manteniendo la racha. Una de cada tipo a la vez, y dos acompañantes: uno a cada lado.</div></div>';
   SLOTS.forEach(function(sl){
-    var ids=RANA.ORDEN.filter(function(id){return RANA.ACC[id].slot===sl[0];});
+    var base=sl[0]==="amigo2"?"amigo":sl[0];
+    var ids=RANA.ORDEN.filter(function(id){return RANA.ACC[id].slot===base;});
     h+='<div class="arm-grupo"><div class="arm-gt">'+sl[1]+'</div><div class="arm-grid">';
-    if(tiene.filter(function(id){return RANA.ACC[id].slot===sl[0];}).length)
+    if(tiene.filter(function(id){return RANA.ACC[id].slot===base;}).length)
       h+='<button type="button" class="arm-c arm-nada'+(acc[sl[0]]?'':' on')+'" data-quitar="'+sl[0]+'"><span class="arm-x">Sin nada</span></button>';
     ids.forEach(function(id){
       var a=RANA.ACC[id],yo=tiene.indexOf(id)>=0,puesta=acc[sl[0]]===id,b=RANA.bloqueDe(id);
@@ -4308,11 +4327,13 @@ function ranaRefrescar(avisar){
   ranaRender();
 }
 document.addEventListener("click",function(ev){
+  if(ev.target.closest("#gvPdf"))glowEvento("guia-pdf");
   var q=ev.target.closest("[data-quitar]");
   if(q){var p=RANA.estado().puestas||{};delete p[q.dataset.quitar];RANA.guardar({puestas:p});ranaRender();return;}
   var b=ev.target.closest("[data-poner]");
-  if(b){var e=RANA.estado(),pp=e.puestas||{},sl=b.dataset.slot;
-    if(pp[sl]===b.dataset.poner)delete pp[sl];else pp[sl]=b.dataset.poner;
+  if(b){var e=RANA.estado(),pp=e.puestas||{},sl=b.dataset.slot,otro=sl==="amigo"?"amigo2":(sl==="amigo2"?"amigo":null);
+    if(pp[sl]===b.dataset.poner)delete pp[sl];
+    else{pp[sl]=b.dataset.poner;if(otro&&pp[otro]===b.dataset.poner)delete pp[otro];}
     RANA.guardar({puestas:pp});ranaRender();}
 });
 ranaRefrescar(false);

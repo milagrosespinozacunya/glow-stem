@@ -3,11 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Práctica de SQL desde cero · Glow STEM</title>
+<title>Práctica de SQL desde cero · Glow STEM</title><link rel="icon" href="../favicon.ico?v=2" sizes="any"><link rel="icon" href="../favicon.svg?v=2" type="image/svg+xml"><link rel="icon" href="../favicon-32.png?v=2" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2"><script>
+window.GLOW_MEDICION="glowstem";
+(function(){var emb=false;try{emb=window.self!==window.top;}catch(e){emb=true;}
+  if(emb||!window.GLOW_MEDICION)return;
+  var e=document.createElement("script");e.async=true;e.src="//gc.zgo.at/count.js";
+  e.setAttribute("data-goatcounter","https://"+window.GLOW_MEDICION+".goatcounter.com/count");
+  document.head.appendChild(e);})();
+function glowEvento(n){try{
+  var emb=false;try{emb=window.self!==window.top;}catch(e){emb=true;}
+  if(emb){parent.postMessage({tipo:"edutech:evento",nombre:n},"*");return;}
+  if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:n,title:n,event:true});
+}catch(e){}}
+</script>
 <meta name="description" content="Aprende SQL desde cero escribiendo consultas reales en tu navegador: 14 módulos, ejercicios con pistas y una base de datos de práctica. Gratis y sin registrarte.">
-<link rel="icon" href="../favicon.ico" sizes="any">
-<link rel="icon" href="../favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
+
+
 <meta name="theme-color" content="#14213D">
 <link rel="canonical" href="https://milagrosespinozacunya.github.io/glow-stem/practica/sql.html">
 <script>(function(){var d=document.documentElement,q=location.search,p=null,m=null;try{p=localStorage.getItem("edutech-palette");m=localStorage.getItem("edutech-theme");}catch(e){}var a=q.match(/[?&]pal=(\w+)/),b=q.match(/[?&]modo=(\w+)/);if(a)p=a[1];if(b)m=b[1];if(!m&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)m="dark";if(p!=="original"&&p!=="rosa")p="formal";d.setAttribute("data-palette",p);if(m==="dark")d.setAttribute("data-theme","dark");var emb=false;try{emb=window.self!==window.top;}catch(e){emb=true;}if(emb||/[?&]embed=1/.test(q))d.className+=" embebido";})();</script>
@@ -368,6 +380,10 @@ svg stop[stop-color="#D81B7E"]{stop-color:var(--rosa-fuerte)}
 @media (prefers-reduced-motion:reduce){.ranita-caja.flota .ranita-fig svg{animation:none}}
 .embebido .volver{display:none}
 @media (max-width:420px){.volver span{display:none}.marca{font-size:.95rem}}
+/* JetBrains Mono une <> en un solo símbolo y parece que se comiera el <. Apagamos las ligaduras
+   en todo lo que sea código: el texto siempre fue correcto, solo se dibujaba distinto. */
+textarea,.editor,pre,code,kbd,samp,.tecla,[style*="--mono"],[class*="codigo"]{
+  font-variant-ligatures:none;font-feature-settings:"liga" 0,"clig" 0,"calt" 0}
 </style>
 </head>
 <body>
@@ -641,6 +657,9 @@ function svg(o){
     if(e.chispas)interior+=chispas();
   }
   if(acc.amigo&&ACC[acc.amigo]&&e.tipo!=="dormida")fuera+=ACC[acc.amigo].svg();
+  /* el segundo acompañante va al otro lado, volteado para que mire hacia afuera */
+  if(acc.amigo2&&ACC[acc.amigo2]&&acc.amigo2!==acc.amigo&&e.tipo!=="dormida")
+    fuera+='<g transform="translate(72,0) scale(-1,1)">'+ACC[acc.amigo2].svg()+'</g>';
   var g='<g transform="translate(36,72) scale('+e.k+') translate(-36,-72)">'+interior+'</g>'+fuera;
   var w=o.w||120, alt=o.alt||("Tu ranita: "+nombreEtapa(dia));
   return '<svg class="rana-svg" viewBox="-10 -6 92 86" width="'+w+'" height="'+Math.round(w*86/92)+'" role="img" aria-label="'+alt+'">'+g+'</svg>';
@@ -1852,7 +1871,9 @@ function ejecutarEn(ta, salida){
   salida.classList.remove('oculto');
   let filas;
   try{ filas = correr(ta.value); }
-  catch(e){ salida.innerHTML = '<p class="mensaje mal"><b>Ups.</b> ' + esc(mensajeError(e)) + '</p>'; return null; }
+  catch(e){ salida.innerHTML = '<p class="mensaje mal"><b>Ups.</b> ' + esc(mensajeError(e)) + '</p>';
+    if(window.ranitaEvento) ranitaEvento('error','ejec');
+    return null; }
   if(!Array.isArray(filas)){
     salida.innerHTML = '<p class="mensaje info">La consulta se ejecutó. Resultado: ' + esc(JSON.stringify(filas)) + '</p>';
     return null;
@@ -2740,15 +2761,47 @@ else iniciar();
     tGlobo=setTimeout(function(){g.classList.remove("ver");
       setTimeout(function(){g.hidden=true;},320);},8000);
   }
+  function decirLibre(txt){
+    var g=document.getElementById("ranitaGlobo");if(!g)return;
+    ultimaFrase=Date.now();
+    g.textContent=txt;g.hidden=false;
+    requestAnimationFrame(function(){g.classList.add("ver");});
+    clearTimeout(tGlobo);
+    tGlobo=setTimeout(function(){g.classList.remove("ver");
+      setTimeout(function(){g.hidden=true;},320);},9500);
+  }
+  /* las piezas que se ganan practicando se avisan aquí mismo, sin salir del laboratorio */
+  var modulosAntes=null;
+  function revisarArmario(){
+    var pr={};try{pr=JSON.parse(localStorage.getItem("edutech-practica-sql")||"{}")||{};}catch(e){}
+    if(window.glowEvento){
+      if(modulosAntes!==null&&(pr.completos||0)>modulosAntes)glowEvento("modulo-completo");
+      modulosAntes=pr.completos||0;
+    }
+    if(typeof RANA==="undefined")return;
+    var nuevas=RANA.recalcular({ejercicios:pr.hechos||0,modulos:pr.completos||0});
+    if(!nuevas.length)return;
+    var g=RANA.estado(),p=g.puestas||{},cambio=false;
+    nuevas.forEach(function(id){var sl=RANA.ACC[id]&&RANA.ACC[id].slot;if(sl&&!p[sl]){p[sl]=id;cambio=true;}});
+    if(cambio)RANA.guardar({puestas:p});
+    var n=RANA.ACC[nuevas[0]]?RANA.ACC[nuevas[0]].nombre:"";
+    setTimeout(function(){
+      decirLibre(nuevas.length>1
+        ? ("\u00a1Desbloqueaste "+nuevas.length+" piezas nuevas! Te esperan en tu armario, en Mi progreso.")
+        : ("\u00a1Desbloqueaste "+n+"! Te espera en tu armario, en Mi progreso."));
+      pintarRanita();
+    },2800);
+  }
   window.ranitaEvento=function(tipo,id){
     if(tipo==="error"){
       fallos[id]=(fallos[id]||0)+1;
       decir(fallos[id]>=3?"atasco":"error");
     }else if(tipo==="acierto"){
-      fallos[id]=0;
-      if(!yaPrimero){yaPrimero=true;decir("primero");}
-      pintarRanita();
-    }else decir(tipo);
+      fallos[id]=0;fallos["ejec"]=0;
+      if(!yaPrimero){yaPrimero=true;decir("primero");
+        if(window.glowEvento)glowEvento("primer-ejercicio");}
+      pintarRanita();revisarArmario();
+    }else{decir(tipo);if(tipo==="modulo")revisarArmario();}
   };
   try{
     var kv="edutech-lab-visita",prev=localStorage.getItem(kv),hoy=new Date().toISOString().slice(0,10);

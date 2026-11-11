@@ -384,6 +384,56 @@ svg stop[stop-color="#D81B7E"]{stop-color:var(--rosa-fuerte)}
    en todo lo que sea código: el texto siempre fue correcto, solo se dibujaba distinto. */
 textarea,.editor,pre,code,kbd,samp,.tecla,[style*="--mono"],[class*="codigo"]{
   font-variant-ligatures:none;font-feature-settings:"liga" 0,"clig" 0,"calt" 0}
+
+/* ---------- chuleta flotante de tablas ---------- */
+.chuleta-boton{position:fixed;z-index:75;
+  right:calc(14px + env(safe-area-inset-right,0px));
+  bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  border:1px solid var(--rosa-fuerte);border-radius:99px;background:var(--rosa-fuerte);color:var(--on-fuerte);
+  padding:11px 18px;font-weight:800;font-size:.9rem;box-shadow:var(--sombra)}
+.chuleta-boton span{color:var(--oro-claro);margin-right:3px}
+.chuleta-boton:hover{filter:brightness(1.08)}
+.chuleta-capa{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.38);
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:0 0 env(safe-area-inset-bottom,0px)}
+.chuleta-panel{position:relative;width:100%;max-width:560px;max-height:72vh;overflow-y:auto;
+  background:var(--blanco);border:1px solid var(--rosa-borde);border-bottom:none;
+  border-radius:20px 20px 0 0;padding:16px;box-shadow:var(--sombra)}
+.chuleta-cab{display:flex;align-items:center;gap:10px;position:sticky;top:-16px;background:var(--blanco);
+  padding-block:2px 8px;margin:-16px -16px 0;padding-inline:16px;z-index:2;border-bottom:1px solid var(--rosa-borde)}
+.chuleta-cab b{font-family:var(--display);color:var(--rosa-texto);font-size:1.05rem;flex:1;padding-top:10px}
+.chuleta-cerrar{border:1px solid var(--rosa-borde);background:var(--blanco);color:var(--tinta);
+  border-radius:50%;width:30px;height:30px;font-size:.9rem;line-height:1;flex-shrink:0;margin-top:8px}
+.chuleta-ayuda{font-size:.82rem;color:var(--tinta-suave);margin-top:10px}
+.chuleta-fichas{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.chuleta-fichas::-webkit-scrollbar{display:none}
+.chuleta-ficha{flex:0 0 auto;border:1px solid var(--rosa-borde);background:var(--blanco);color:var(--tinta);
+  border-radius:99px;padding:5px 13px;font-size:.82rem;font-weight:700;font-family:var(--mono)}
+.chuleta-ficha[aria-pressed="true"]{background:var(--rosa-fuerte);border-color:var(--rosa-fuerte);color:var(--on-fuerte)}
+.chuleta-tabla{display:inline-flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;margin-top:4px;
+  background:var(--rosa-suave);border:1px solid var(--rosa-borde);border-radius:10px;padding:6px 12px}
+.chuleta-tabla .cn{font-family:var(--mono);font-size:.95rem;font-weight:700;color:var(--rosa-texto)}
+.chuleta-tabla .ct{font-size:.68rem;color:var(--tinta-suave);letter-spacing:.04em;text-transform:uppercase}
+.chuleta-desc{font-size:.84rem;color:var(--tinta-suave);margin-top:7px}
+.chuleta-cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:11px}
+.chuleta-col{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;
+  border:1px solid var(--rosa-borde);background:var(--blanco);border-radius:10px;padding:7px 10px;min-width:0}
+.chuleta-col:hover{border-color:var(--rosa);background:var(--rosa-suave)}
+.chuleta-col .cn{font-family:var(--mono);font-size:.82rem;font-weight:700;color:var(--tinta);
+  overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.chuleta-col .ct{font-size:.68rem;color:var(--tinta-suave);letter-spacing:.04em;text-transform:uppercase}
+.chuleta-aviso{position:sticky;bottom:0;margin-top:12px;padding:9px 13px;border-radius:11px;
+  background:var(--exito-fondo);border:1px solid var(--exito-borde);color:var(--exito-texto);font-size:.86rem;font-weight:700;
+  font-family:var(--mono);opacity:0;transform:translateY(6px);transition:opacity .18s ease,transform .18s ease}
+.chuleta-aviso.visible{opacity:1;transform:none}
+.chuleta-aviso.malo{background:var(--aviso-fondo);border-color:var(--oro-borde);color:var(--oro-texto);font-family:var(--cuerpo)}
+@media (min-width:700px){
+  .chuleta-capa{align-items:flex-end;justify-content:flex-end;padding:0 14px 76px 14px}
+  .chuleta-panel{border-radius:20px;border-bottom:1px solid var(--rosa-borde);max-height:68vh}
+}
+.pie{padding-bottom:88px}
+@media (prefers-reduced-motion:reduce){.chuleta-aviso{transition:none}}
+
 </style>
 </head>
 <body>
@@ -2550,6 +2600,167 @@ function widgetConteos(){
   pintar(0);
   return caja;
 }
+
+/* ================= chuleta flotante de tablas =================
+   Un boton fijo abre un panel con las tablas y sus columnas.
+   Tocar un nombre lo inserta en el ultimo editor que estuvo activo. */
+
+let ultimoEditor = null;      // el textarea donde se escribio por ultima vez
+let tablaAbierta = null;      // que tabla esta desplegada en el panel
+
+// Cualquier editor de la pagina queda registrado al recibir el foco.
+document.addEventListener('focusin', ev=>{
+  const el = ev.target;
+  if(el && el.tagName === 'TEXTAREA' && el.classList.contains('editor')) ultimoEditor = el;
+});
+
+function recordarTabla(nombre){
+  try{ localStorage.setItem('sqlglow.chuleta', nombre); }catch(e){}
+}
+function tablaRecordada(){
+  try{ return localStorage.getItem('sqlglow.chuleta'); }catch(e){ return null; }
+}
+
+// Mete un texto en la posicion del cursor del ultimo editor usado.
+function insertarEnEditor(texto){
+  if(!ultimoEditor || !document.body.contains(ultimoEditor)){
+    return {ok:false, motivo:'Toca primero el editor donde quieres escribirlo.'};
+  }
+  const ta = ultimoEditor;
+  const ini = ta.selectionStart == null ? ta.value.length : ta.selectionStart;
+  const fin = ta.selectionEnd == null ? ini : ta.selectionEnd;
+  const antes = ta.value.slice(0, ini);
+  const despues = ta.value.slice(fin);
+  // Un espacio delante si lo anterior no termina en espacio, salto o parentesis.
+  const pegado = antes === '' || /[\s(.,]$/.test(antes) ? '' : ' ';
+  ta.value = antes + pegado + texto + despues;
+  const nuevaPos = ini + pegado.length + texto.length;
+  ta.focus();
+  ta.selectionStart = ta.selectionEnd = nuevaPos;
+  return {ok:true};
+}
+
+function avisoChuleta(caja, texto, bien){
+  let a = $('.chuleta-aviso', caja);
+  if(!a){
+    a = crear('div','chuleta-aviso');
+    a.setAttribute('role','status');
+    a.setAttribute('aria-live','polite');
+    caja.appendChild(a);
+  }
+  a.textContent = texto;
+  a.classList.toggle('malo', !bien);
+  a.classList.add('visible');
+  clearTimeout(a._t);
+  a._t = setTimeout(()=> a.classList.remove('visible'), 2200);
+}
+
+function construirChuleta(){
+  const capa = crear('div','chuleta-capa oculto');
+  capa.id = 'chuletaCapa';
+  capa.setAttribute('role','dialog');
+  capa.setAttribute('aria-modal','false');
+  capa.setAttribute('aria-label','Tablas y columnas de la base de practica');
+
+  const panel = crear('div','chuleta-panel');
+  const cab = crear('div','chuleta-cab');
+  cab.innerHTML = '<b>Tablas de la práctica</b>';
+  const bCerrar = crear('button','chuleta-cerrar','✕');
+  bCerrar.type = 'button';
+  bCerrar.setAttribute('aria-label','Cerrar las tablas');
+  cab.appendChild(bCerrar);
+  panel.appendChild(cab);
+
+  panel.appendChild(crear('p','chuleta-ayuda','Toca cualquier nombre para escribirlo en tu consulta.'));
+
+  const fichas = crear('div','chuleta-fichas');
+  panel.appendChild(fichas);
+  const cuerpo = crear('div','chuleta-cuerpo');
+  panel.appendChild(cuerpo);
+  capa.appendChild(panel);
+
+  function pintar(nombre){
+    tablaAbierta = nombre;
+    recordarTabla(nombre);
+    fichas.querySelectorAll('.chuleta-ficha').forEach(b=> b.setAttribute('aria-pressed', String(b.dataset.t===nombre)));
+    const info = ESQUEMA[nombre];
+    cuerpo.innerHTML = '';
+
+    const bTabla = crear('button','chuleta-tabla','<span class="cn">'+esc(nombre)+'</span><span class="ct">nombre de la tabla</span>');
+    bTabla.type = 'button';
+    bTabla.title = 'Insertar el nombre de la tabla';
+    bTabla.addEventListener('click',()=>{
+      const r = insertarEnEditor(nombre);
+      avisoChuleta(panel, r.ok ? ('Escribí  '+nombre) : r.motivo, r.ok);
+    });
+    cuerpo.appendChild(bTabla);
+    cuerpo.appendChild(crear('p','chuleta-desc', esc(info.desc)));
+
+    const cols = crear('div','chuleta-cols');
+    info.cols.forEach(c=>{
+      const b = crear('button','chuleta-col','<span class="cn">'+esc(c[0])+'</span><span class="ct">'+esc(c[1])+'</span>');
+      b.type = 'button';
+      if(c[2]) b.title = c[2];
+      b.addEventListener('click',()=>{
+        const r = insertarEnEditor(c[0]);
+        avisoChuleta(panel, r.ok ? ('Escribí  '+c[0]) : r.motivo, r.ok);
+      });
+      cols.appendChild(b);
+    });
+    cuerpo.appendChild(cols);
+
+    // Dos filas de ejemplo, plegadas: ayudan a recordar como se escriben los valores.
+    const bEj = crear('button','btn fantasma chico','▸ ver 2 filas de ejemplo');
+    bEj.type = 'button';
+    bEj.style.marginTop = '10px';
+    bEj.setAttribute('aria-expanded','false');
+    const caja = crear('div','oculto');
+    bEj.addEventListener('click',()=>{
+      const cerrado = caja.classList.toggle('oculto');
+      bEj.textContent = cerrado ? '▸ ver 2 filas de ejemplo' : '▾ ocultar las filas';
+      bEj.setAttribute('aria-expanded', String(!cerrado));
+      if(!cerrado && !caja.innerHTML) caja.innerHTML = tablaHTML(BD[nombre], 2);
+    });
+    cuerpo.appendChild(bEj);
+    cuerpo.appendChild(caja);
+  }
+
+  Object.keys(ESQUEMA).forEach(n=>{
+    const b = crear('button','chuleta-ficha', n);
+    b.type = 'button'; b.dataset.t = n;
+    b.addEventListener('click',()=> pintar(n));
+    fichas.appendChild(b);
+  });
+
+  const boton = crear('button','chuleta-boton','<span aria-hidden="true">✦</span> Tablas');
+  boton.type = 'button';
+  boton.id = 'chuletaBoton';
+  boton.setAttribute('aria-expanded','false');
+
+  function abrir(){
+    capa.classList.remove('oculto');
+    boton.setAttribute('aria-expanded','true');
+    const guardada = tablaAbierta || tablaRecordada();
+    pintar(ESQUEMA[guardada] ? guardada : Object.keys(ESQUEMA)[0]);
+  }
+  function cerrar(vuelve){
+    capa.classList.add('oculto');
+    boton.setAttribute('aria-expanded','false');
+    if(vuelve) boton.focus();
+  }
+  boton.addEventListener('click',()=>{
+    if(capa.classList.contains('oculto')) abrir(); else cerrar(false);
+  });
+  bCerrar.addEventListener('click',()=> cerrar(true));
+  capa.addEventListener('click', ev=>{ if(ev.target === capa) cerrar(true); });
+  document.addEventListener('keydown', ev=>{
+    if(ev.key === 'Escape' && !capa.classList.contains('oculto')) cerrar(true);
+  });
+
+  document.body.appendChild(capa);
+  document.body.appendChild(boton);
+}
+
 /* ================= render de módulos ================= */
 const WIDGETS = {explorador:widgetExplorador, joins:widgetJoins, orden:widgetOrden, ventana:widgetVentana, certificado:widgetCertificado, dospasos:widgetDosPasos, cadena:widgetCadena, conteos:widgetConteos};
 let actual = 0;
@@ -2683,6 +2894,7 @@ function iniciar(){
     guardarProgreso();
     renderModulo(actual);
   });
+  construirChuleta();
   setTimeout(()=>{ try{ prepararMotor(); }catch(e){} }, 300);
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',iniciar);

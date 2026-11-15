@@ -1414,6 +1414,17 @@ button.arm-c:hover{border-color:var(--teal);transform:translateY(-2px)}
 .pq-fin{font-family:var(--f-display);font-size:clamp(20px,2.6vw,25px)!important;line-height:1.5!important;
   color:var(--heading)!important;text-align:center;margin:28px auto 0!important;max-width:46ch;text-wrap:balance}
 @media(max-width:560px){.pq-txt{margin-top:20px}}
+
+/* ---------- constancia de la practica de SQL ---------- */
+.ct-panel{margin-top:16px}
+.ct-preview{position:relative;margin-top:14px;border-radius:12px;overflow:hidden;
+  border:1px solid rgba(var(--ink-rgb),0.12);background:#FFFFFF}
+.ct-preview canvas{display:block;width:100%;height:auto}
+.ct-locked{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:7px;text-align:center;padding:22px;background:var(--sup)}
+.ct-locked svg{width:28px;height:28px;fill:none;stroke:var(--tinta-suave);stroke-width:1.7}
+.ct-locked-t{font-family:var(--f-display);font-size:1.12rem;color:var(--tinta)}
+.ct-locked-s{font-size:.88rem;color:var(--tinta-suave);max-width:46ch;line-height:1.5}
 </style>
 <!-- Medición de uso: sin cookies, sin datos personales, sin identificar a nadie.
      Pega entre las comillas tu código de GoatCounter (el que te dan al registrarte). -->
@@ -1722,6 +1733,27 @@ function glowEvento(n){try{if(window.goatcounter&&window.goatcounter.count)
     </div>
     <div class="rana-panel fi" id="ranaPanel"></div>
     <div class="mp-lab fi" id="mpLab"></div>
+    <div class="mp-panel fi ct-panel" id="ctPanel">
+      <div class="mp-panel-t">Tu constancia de la práctica de SQL</div>
+      <div class="mp-panel-s">Se desbloquea por niveles, según los módulos que completes. Puedes descargar la de cualquier nivel que ya hayas alcanzado.</div>
+      <div class="bd-row">
+        <div class="bd-field"><label for="ctName">Tu nombre</label><input class="bd-input" id="ctName" type="text" maxlength="48" placeholder="Ej. María López" autocomplete="name"></div>
+        <div class="bd-field"><label for="ctNivel">Nivel</label><select class="bd-input" id="ctNivel"></select></div>
+      </div>
+      <div class="ct-preview">
+        <canvas id="ctCanvas" width="2000" height="1414" aria-label="Vista previa de tu constancia de la práctica de SQL"></canvas>
+        <div class="ct-locked" id="ctLocked">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+          <div class="ct-locked-t" id="ctLockedT">Tu primera constancia te espera</div>
+          <div class="ct-locked-s" id="ctLockedS">Completa los 5 módulos de Fundamentos en la práctica de SQL y la constancia de nivel básico queda lista para descargar.</div>
+        </div>
+      </div>
+      <div class="bd-actions">
+        <button class="bd-btn bd-btn-a" id="ctDownload"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Descargar constancia</button>
+        <button class="bd-btn bd-btn-b" id="ctCopy"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copiar texto</button>
+      </div>
+      <div class="bd-note">Es una constancia de progreso personal: acredita la práctica que completaste aquí. No es un título académico ni una certificación oficial.</div>
+    </div>
     <div class="mp-cols fi">
       <div class="mp-panel">
         <div class="mp-panel-t">Progreso por ruta</div>
@@ -3892,6 +3924,7 @@ function updateMiProgreso(){
 // ---------- Refrescar todo ----------
 function refreshProgressUI(){
   updateRecProgress();updatePills();updateMiProgreso();updateBadgeSelect();drawBadge();updateV2Counters();
+  if(typeof updateCertSelect==="function"){updateCertSelect();drawCert();}
 }
 
 // ---------- Frase motivacional ----------
@@ -4009,6 +4042,312 @@ function drawBadge(){
     c.fillStyle=BD_C.nota;c.font='400 17px "DM Sans", sans-serif';c.fillText("Insignia simbólica de progreso personal · No es un certificado oficial",cx,1002);
   });
 }
+
+// =====================================================================
+// ===== Constancia de la practica de SQL (A4 horizontal, 3 niveles) ===
+// =====================================================================
+var CT_QR_SRC = "data:image/png;base64,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";
+var CT_QR_IMG = null;
+// Cada nivel exige sus modulos (ids) y los de los niveles anteriores. Los ids no son
+// consecutivos: "m9b" es el modulo de CTEs, que se separo del antiguo modulo 9.
+var CT_TOTAL = 15;
+// Modulos completos sin contar el reto final, que no es un modulo de la ruta.
+function ctModulosHechos(r){
+  if(!r) return 0;
+  if(r.ids){ var n=0; for(var i=0;i<r.ids.length;i++){ if(r.ids[i]!=="reto") n++; } return Math.min(CT_TOTAL,n); }
+  return Math.min(CT_TOTAL, r.completos|0);
+}
+var CT_NIV = [null,
+ {pill:"NIVEL BÁSICO", hasta:5, ids:["m1","m2","m3","m4","m5"],  logro:"por completar el nivel básico de la",
+  texto:"Consultar bases de datos relacionales de forma autónoma. Reconocer la estructura de un esquema que no se conocía, ubicar en qué tabla vive cada dato, seleccionar y renombrar columnas, construir campos calculados a partir de los existentes, filtrar mediante condiciones simples y compuestas, incluidas búsquedas por patrón y campos sin dato, y entregar los resultados ordenados y acotados a lo que se pidió.",
+  claves:"SELECT  ·  WHERE  ·  LIKE  ·  IS NULL  ·  ORDER BY  ·  LIMIT  ·  AS  ·  CASE WHEN",
+  falta:"Completa los 5 módulos de Fundamentos en la práctica de SQL y la constancia de nivel básico queda lista para descargar."},
+ {pill:"NIVEL INTERMEDIO", hasta:8, ids:["m6","m7","m8"], logro:"por completar el nivel intermedio de la",
+  texto:"Elaborar indicadores y reportes a partir de datos en bruto. Resumir grandes volúmenes de registros en totales, promedios y conteos, segmentar esos indicadores por categoría, aplicar condiciones sobre los resultados ya agregados y combinar tablas relacionadas a través de sus campos en común, distinguiendo qué registros conserva y cuáles descarta cada tipo de unión.",
+  claves:"COUNT  ·  SUM  ·  AVG  ·  GROUP BY  ·  HAVING  ·  INNER JOIN  ·  LEFT JOIN",
+  falta:"Completa los módulos de Agrupar y unir para desbloquear la constancia de nivel intermedio."},
+ {pill:"NIVEL AVANZADO", hasta:15, ids:["m9","m9b","m10","m11","m12","m13","m14"], logro:"por completar la",
+  texto:"Asumir análisis completos sobre bases de datos reales. Estructurar consultas complejas en etapas legibles, calcular rankings, acumulados y comparaciones entre filas, trabajar con fechas y series de tiempo para medir evolución y no solo estado, tratar valores nulos, duplicados y relaciones incompletas antes de que alteren el resultado, y escribir consultas que otra persona pueda leer, auditar y mantener.",
+  claves:"CTE  ·  subconsultas  ·  funciones de ventana  ·  RANK  ·  fechas  ·  NULL",
+  falta:"Completa los módulos avanzados para desbloquear la constancia del nivel más alto."}];
+
+// Nivel alcanzado: exige los modulos 1..hasta completos, no solo la cantidad.
+function ctNivelLogrado(r){
+  if(!r) return 0;
+  var n=0, i, k;
+  if(r.ids && r.ids.length){
+    var set={}; for(i=0;i<r.ids.length;i++) set[r.ids[i]]=1;
+    for(k=1;k<=3;k++){
+      var ok=true, req=CT_NIV[k].ids;
+      for(i=0;i<req.length;i++){ if(!set[req[i]]){ ok=false; break; } }
+      if(ok) n=k; else break;
+    }
+    return n;
+  }
+  // Progreso guardado por una version anterior del laboratorio: solo hay el conteo.
+  var c=r.completos|0;
+  if(c>=15) return 3; if(c>=8) return 2; if(c>=5) return 1;
+  return 0;
+}
+
+function ctRound(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+
+// Parte un texto en lineas centradas y las dibuja. Devuelve la y siguiente.
+function ctParrafo(c,texto,maxW,lineH,cx,y){
+  var pal=texto.split(" "), linea="", lineas=[], i, prueba;
+  for(i=0;i<pal.length;i++){
+    prueba = linea ? linea+" "+pal[i] : pal[i];
+    if(c.measureText(prueba).width>maxW && linea){ lineas.push(linea); linea=pal[i]; }
+    else linea=prueba;
+  }
+  if(linea) lineas.push(linea);
+  for(i=0;i<lineas.length;i++) c.fillText(lineas[i],cx,y+i*lineH);
+  return y+lineas.length*lineH;
+}
+
+// Reduce el cuerpo hasta que el parrafo quepa en el alto disponible.
+function ctAjustar(c,texto,maxW,maxLineas,base){
+  var sz=base;
+  while(sz>20){
+    c.font='400 '+sz+'px "DM Sans", sans-serif';
+    var pal=texto.split(" "), linea="", n=1, i, prueba;
+    for(i=0;i<pal.length;i++){
+      prueba = linea ? linea+" "+pal[i] : pal[i];
+      if(c.measureText(prueba).width>maxW && linea){ n++; linea=pal[i]; } else linea=prueba;
+    }
+    if(n<=maxLineas) return sz;
+    sz-=1;
+  }
+  return sz;
+}
+
+var ctFontsReady=false;
+function ctCargarQR(){
+  if(CT_QR_IMG) return Promise.resolve(CT_QR_IMG);
+  return new Promise(function(res){
+    var im=new Image();
+    im.onload=function(){CT_QR_IMG=im;res(im);};
+    im.onerror=function(){res(null);};
+    im.src=CT_QR_SRC;
+  });
+}
+
+function drawCert(){
+  var cv=document.getElementById("ctCanvas"); if(!cv) return Promise.resolve();
+  var sel=document.getElementById("ctNivel");
+  var nivel=sel&&sel.value?parseInt(sel.value,10):0;
+  var lock=document.getElementById("ctLocked");
+  var dl=document.getElementById("ctDownload"), cp=document.getElementById("ctCopy");
+  var r=lsGet("edutech-practica-sql",null);
+  var max=ctNivelLogrado(r);
+  if(!nivel||nivel>max){
+    if(lock){
+      lock.style.display="flex";
+      var sig=CT_NIV[Math.min(3,max+1)];
+      var t=document.getElementById("ctLockedT"), sb=document.getElementById("ctLockedS");
+      if(t) t.textContent = max?"Te falta poco para la siguiente":"Tu primera constancia te espera";
+      if(sb) sb.textContent = sig?sig.falta:"";
+    }
+    if(dl) dl.disabled=true; if(cp) cp.disabled=true;
+    return Promise.resolve();
+  }
+  if(lock) lock.style.display="none";
+  if(dl) dl.disabled=false; if(cp) cp.disabled=false;
+
+  var fontsP = (ctFontsReady||!document.fonts) ? Promise.resolve() : Promise.all([
+    document.fonts.load('600 86px "Playfair Display"'),
+    document.fonts.load('500 46px "Playfair Display"'),
+    document.fonts.load('italic 600 72px "Playfair Display"'),
+    document.fonts.load('700 28px "DM Sans"'),
+    document.fonts.load('400 29px "DM Sans"')]).then(function(){ctFontsReady=true;}).catch(function(){});
+  // Si las fuentes tardan o no cargan, dibujamos igual: mejor con la tipografia
+  // de respaldo que una constancia en blanco.
+  fontsP = Promise.race([fontsP, new Promise(function(r){setTimeout(r,2500);})]);
+
+  return Promise.all([fontsP, ctCargarQR()]).then(function(res){
+    var qr=res[1];
+    var N=CT_NIV[nivel];
+    var c=cv.getContext("2d"), W=2000, H=1414, cx=W/2;
+    var TINTA="#1B2A4A", SUAVE="#7A8699", CUERPO="#34425C", DATO="#5C6B82", CLAVE="#8E9AAD";
+    c.clearRect(0,0,W,H);
+    c.fillStyle="#FFFFFF"; c.fillRect(0,0,W,H);
+    c.textAlign="center"; c.textBaseline="alphabetic";
+    if("letterSpacing" in c) c.letterSpacing="0px";
+
+    // cinta degradada superior
+    var g=c.createLinearGradient(0,0,W,0);
+    g.addColorStop(0,"#B5367A"); g.addColorStop(0.26,"#D81B7E");
+    g.addColorStop(0.52,"#E8699F"); g.addColorStop(1,"#E8C06A");
+    c.fillStyle=g; c.fillRect(0,0,W,18);
+
+    // marco doble
+    c.strokeStyle="#C9D2E0"; c.lineWidth=3; c.strokeRect(52,52,W-104,H-104);
+    c.strokeStyle="#E6EBF2"; c.lineWidth=2; c.strokeRect(66,66,W-132,H-132);
+
+    // birrete + marca
+    var cap=new Path2D("M22 9 12 4 2 9l10 5 10-5Z");
+    var cap2=new Path2D("M6 11.5V16c0 1.4 2.7 2.6 6 2.6s6-1.2 6-2.6v-4.5");
+    var cap3=new Path2D("M22 9v5.5");
+    c.save();
+    c.translate(884,124); c.scale(52/24,52/24);
+    c.strokeStyle=TINTA; c.lineWidth=1.7; c.lineCap="round"; c.lineJoin="round";
+    c.stroke(cap); c.stroke(cap2); c.stroke(cap3);
+    c.restore();
+    c.fillStyle=TINTA; c.font='700 38px "Playfair Display", Georgia, serif';
+    if("letterSpacing" in c) c.letterSpacing="3.4px";
+    c.textAlign="left"; c.fillText("GLOW", 962, 176);
+    var wGlow=c.measureText("GLOW").width;
+    if("letterSpacing" in c) c.letterSpacing="0px";
+    c.fillStyle="#C8366F"; c.font='700 34px "DM Sans", sans-serif';
+    c.fillText("✦", 962+wGlow+16, 174);
+    c.fillStyle=TINTA; c.font='700 38px "Playfair Display", Georgia, serif';
+    if("letterSpacing" in c) c.letterSpacing="3.4px";
+    c.fillText("STEM", 962+wGlow+56, 176);
+    if("letterSpacing" in c) c.letterSpacing="0px";
+    c.textAlign="center";
+
+    // pastilla de nivel
+    c.font='700 30px "DM Sans", sans-serif';
+    if("letterSpacing" in c) c.letterSpacing="4.8px";
+    var pw=c.measureText(N.pill).width+76;
+    ctRound(c,cx-pw/2,200,pw,68,34); c.fillStyle=TINTA; c.fill();
+    c.fillStyle="#FFFFFF"; c.fillText(N.pill,cx+3,245);
+    if("letterSpacing" in c) c.letterSpacing="0px";
+
+    // se otorga a
+    c.fillStyle=SUAVE; c.font='400 25px "DM Sans", sans-serif';
+    if("letterSpacing" in c) c.letterSpacing="3.75px";
+    c.fillText("SE OTORGA A",cx+2,322);
+    if("letterSpacing" in c) c.letterSpacing="0px";
+
+    // nombre
+    var nm=(document.getElementById("ctName").value||"").trim()||"Tu nombre";
+    var sz=74; do{ c.font='600 '+sz+'px "Playfair Display", Georgia, serif';
+      if(c.measureText(nm).width<=1560) break; sz-=3; }while(sz>32);
+    c.fillStyle=TINTA; c.fillText(nm,cx,418);
+
+    // regla dorada
+    var gr=c.createLinearGradient(cx-112,0,cx+112,0);
+    gr.addColorStop(0,"#E8C06A"); gr.addColorStop(1,"#D9A94A");
+    c.fillStyle=gr; c.fillRect(cx-112,481,224,4);
+
+    // logro
+    c.fillStyle=TINTA; c.font='500 50px "Playfair Display", Georgia, serif';
+    c.fillText(N.logro,cx,550);
+    var tg=c.createLinearGradient(cx-260,0,cx+260,0);
+    tg.addColorStop(0,"#C8366F"); tg.addColorStop(1,"#D81B7E");
+    c.fillStyle=tg; c.font='italic 600 72px "Playfair Display", Georgia, serif';
+    c.fillText("práctica de SQL",cx,628);
+
+    // datos
+    var st=r||{};
+    var fecha=new Date().toLocaleDateString("es-PE",{day:"numeric",month:"long",year:"numeric"});
+    var linea=ctModulosHechos(r)+" de "+CT_TOTAL+" módulos   ·   "+(st.hechos|0)+" ejercicios resueltos   ·   "+fecha;
+    c.fillStyle=DATO; c.font='400 26px "DM Sans", sans-serif';
+    c.fillText(linea,cx,698);
+
+    // separador
+    c.strokeStyle="#EDF1F6"; c.lineWidth=2;
+    c.beginPath(); c.moveTo(168,736); c.lineTo(W-168,736); c.stroke();
+
+    // lo que ahora se hacer
+    c.fillStyle=SUAVE; c.font='700 22px "DM Sans", sans-serif';
+    if("letterSpacing" in c) c.letterSpacing="3.5px";
+    c.fillText("LO QUE AHORA SÉ HACER",cx+2,787);
+    if("letterSpacing" in c) c.letterSpacing="0px";
+    var cuerpoSz=ctAjustar(c,N.texto,1580,5,29);
+    c.fillStyle=CUERPO; c.font='400 '+cuerpoSz+'px "DM Sans", sans-serif';
+    var yFin=ctParrafo(c,N.texto,1580,Math.round(cuerpoSz*1.66),cx,840);
+    c.fillStyle=CLAVE; c.font='400 23px "JetBrains Mono", ui-monospace, monospace';
+    if("letterSpacing" in c) c.letterSpacing="0.9px";
+    c.fillText(N.claves,cx,yFin+22);
+    if("letterSpacing" in c) c.letterSpacing="0px";
+
+    // pie: izquierda
+    c.textAlign="left";
+    c.fillStyle="#9AA6B8"; c.font='400 20px "DM Sans", sans-serif';
+    if("letterSpacing" in c) c.letterSpacing="2.8px";
+    c.fillText("EMITIDA POR",176,1218);
+    if("letterSpacing" in c) c.letterSpacing="0px";
+    c.fillStyle=TINTA; c.font='700 27px "DM Sans", sans-serif';
+    c.fillText("Milagros Espinoza Cunya",176,1256);
+    c.fillStyle=SUAVE; c.font='400 23px "DM Sans", sans-serif';
+    c.fillText("Fundadora de Glow STEM",176,1292);
+
+    // pie: centro
+    c.textAlign="center";
+    c.fillStyle=DATO; c.font='700 23px "DM Sans", sans-serif';
+    c.fillText("Constancia de progreso personal",cx,1217);
+    c.fillStyle="#A6B0C0"; c.font='400 19px "DM Sans", sans-serif';
+    ctParrafo(c,"Acredita la práctica completada en la plataforma. No es un título académico ni una certificación oficial.",600,28,cx,1252);
+
+    // pie: derecha, QR
+    if(qr) c.drawImage(qr,1700,1144,124,124);
+    c.fillStyle=CLAVE; c.font='400 19px "DM Sans", sans-serif';
+    c.textAlign="right";
+    c.fillText("Aprende tú también",1824,1290);
+    c.textAlign="center";
+  });
+}
+
+function certTexto(){
+  var sel=document.getElementById("ctNivel");
+  var nivel=sel&&sel.value?parseInt(sel.value,10):0;
+  if(!nivel) return "";
+  var N=CT_NIV[nivel], r=lsGet("edutech-practica-sql",null)||{};
+  var nombres=["","básico","intermedio","avanzado"];
+  var t="Completé el nivel "+nombres[nivel]+" de la práctica de SQL de Glow STEM: "+ctModulosHechos(r)+" módulos y "+(r.hechos|0)+" ejercicios escribiendo consultas de verdad, no viendo videos.\n\n"+N.texto;
+  var u=pageUrl(); if(u) t+="\n\nLa práctica es gratuita y no pide cuenta: "+u;
+  t+="\n\n#SQL #AnalisisDeDatos #AprendizajeContinuo";
+  return t;
+}
+
+function updateCertSelect(){
+  var sel=document.getElementById("ctNivel"); if(!sel) return;
+  var prev=sel.value;
+  var max=ctNivelLogrado(lsGet("edutech-practica-sql",null));
+  var nombres=["","Básico","Intermedio","Avanzado"];
+  var html="";
+  for(var k=1;k<=3;k++){
+    html+='<option value="'+k+'"'+(k<=max?'':' disabled')+'>'+nombres[k]+(k<=max?'':' · aún no')+'</option>';
+  }
+  sel.innerHTML=html;
+  if(prev&&parseInt(prev,10)<=max) sel.value=prev;
+  else if(max) sel.value=String(max);
+  else sel.value="";
+}
+
+function initCert(){
+  var nm=document.getElementById("ctName"); if(!nm) return;
+  nm.value=lsGet("edutech-name","");
+  var tmr=null;
+  nm.addEventListener("input",function(){
+    lsSet("edutech-name",nm.value);
+    var otro=document.getElementById("bdName"); if(otro&&otro.value!==nm.value) otro.value=nm.value;
+    clearTimeout(tmr); tmr=setTimeout(drawCert,200);
+  });
+  var bd=document.getElementById("bdName");
+  if(bd) bd.addEventListener("input",function(){ if(nm.value!==bd.value){ nm.value=bd.value; clearTimeout(tmr); tmr=setTimeout(drawCert,200);} });
+  document.getElementById("ctNivel").addEventListener("change",drawCert);
+  document.getElementById("ctDownload").addEventListener("click",function(){
+    if(typeof glowEvento==="function") glowEvento("constancia-practica-descargada");
+    drawCert().then(function(){
+      var cv=document.getElementById("ctCanvas");
+      var nombres=["","basico","intermedio","avanzado"];
+      var n=parseInt(document.getElementById("ctNivel").value,10)||1;
+      var a=document.createElement("a");
+      a.download="constancia-sql-"+nombres[n]+".png";
+      a.href=cv.toDataURL("image/png");
+      document.body.appendChild(a); a.click(); a.remove();
+      showToast("Constancia descargada");
+    });
+  });
+  document.getElementById("ctCopy").addEventListener("click",function(){
+    copyText(certTexto(),"Texto copiado. Pégalo en tu publicación de LinkedIn");
+  });
+  updateCertSelect(); drawCert();
+}
+
 function badgeText(){
   var tema=document.getElementById("bdTema").value;var r=milestoneRank(tema);var s=temaStats(tema);
   var logros=["","Empecé mi ruta de aprendizaje de "+tema,"Completé el nivel Básico de mi ruta de "+tema,"Completé el nivel Intermedio de mi ruta de "+tema,"Completé el nivel Avanzado de mi ruta de "+tema];
@@ -4053,6 +4392,7 @@ function initMiProgreso(){
 window.__progReady=true;
 initQuotes();
 initBadge();
+initCert();
 initMiProgreso();
 refreshProgressUI();
 
@@ -4232,7 +4572,9 @@ window.addEventListener("message",function(e){
   if(m.tipo==="edutech:lab-listo"){var l=document.getElementById("prLoading");if(l)l.hidden=true;labMsg(labThemeMsg());}
   else if(m.tipo==="edutech:sql-progreso"&&m.datos){var ant=lsGet("edutech-practica-sql",null);lsSet("edutech-practica-sql",m.datos);
     if(m.datos.hechos&&(!ant||m.datos.hechos>(ant.hechos||0)))logActivity();
-    if(typeof ranaRefrescar==="function")ranaRefrescar();var full=document.getElementById("prFull");if(full&&m.datos.actual)full.href="practica/sql.html#"+encodeURIComponent(m.datos.actual);}
+    if(typeof ranaRefrescar==="function")ranaRefrescar();
+    if(typeof updateCertSelect==="function"){updateCertSelect();drawCert();}
+    renderLabProgress();var full=document.getElementById("prFull");if(full&&m.datos.actual)full.href="practica/sql.html#"+encodeURIComponent(m.datos.actual);}
 });
 document.querySelectorAll(".pr-lang.is-soon").forEach(function(b){
   b.addEventListener("click",function(){showToast("La práctica de "+b.dataset.soon+" llega muy pronto. Mientras tanto, ¡dale con SQL!");});
@@ -4254,7 +4596,7 @@ function renderLabProgress(){
     '<div class="mp-lab-bar" role="progressbar" aria-label="Avance en la práctica de SQL" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'"><i style="width:'+pct+'%"></i></div></div>'+
     '<a class="mp-lab-btn" href="#practica/'+esc(fin?"reto":(r.siguiente||"m1"))+'">'+(fin?'Repasar el reto final':'Continuar: módulo '+(r.siguiente==="reto"?"final":(r.siguienteN|0)))+' '+arr+'</a>';
 }
-window.addEventListener("storage",function(e){if(e.key==="edutech-practica-sql")renderLabProgress();});
+window.addEventListener("storage",function(e){if(e.key==="edutech-practica-sql"){renderLabProgress();if(typeof updateCertSelect==="function"){updateCertSelect();drawCert();}}});
 renderLabProgress();
 
 // =====================================================================

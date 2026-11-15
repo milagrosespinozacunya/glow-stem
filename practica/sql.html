@@ -16,7 +16,7 @@ function glowEvento(n){try{
   if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:n,title:n,event:true});
 }catch(e){}}
 </script>
-<meta name="description" content="Aprende SQL desde cero escribiendo consultas reales en tu navegador: 14 módulos, ejercicios con pistas y una base de datos de práctica. Gratis y sin registrarte.">
+<meta name="description" content="Aprende SQL desde cero escribiendo consultas reales en tu navegador: 15 módulos, ejercicios con pistas y una base de datos de práctica. Gratis y sin registrarte.">
 
 
 
@@ -132,6 +132,9 @@ button{font-family:inherit;font-size:1rem;cursor:pointer}
 .meta-modulo{color:var(--tinta-suave);font-size:.9rem;margin-top:8px}
 .bloque{margin-top:18px}
 .bloque > p + p{margin-top:12px}
+.bloque > * + h3{margin-top:28px}
+.bloque > h3 + p{margin-top:8px}
+.bloque > div + p{margin-top:14px}
 .lista{margin:10px 0 0;padding-left:0;list-style:none;display:grid;gap:9px}
 .lista li{position:relative;padding-left:24px;color:var(--tinta)}
 .lista li::before{content:"✦";position:absolute;left:4px;top:0;color:var(--oro);font-size:.85rem}
@@ -457,7 +460,7 @@ textarea,.editor,pre,code,kbd,samp,.tecla,[style*="--mono"],[class*="codigo"]{
   <section class="portada envoltura" id="portada">
     <div class="brillos" id="brillosPortada" aria-hidden="true"></div>
     <div class="contenido">
-      <span class="cinta">✦ Ruta completa ✦ 14 módulos</span>
+      <span class="cinta">✦ Ruta completa ✦ 15 módulos</span>
       <h1>SQL de cero a <em>pro</em></h1>
       <p class="bajada">Un curso interactivo para aprender SQL desde la primera consulta hasta las métricas que escribe una científica de datos. Con una base de datos real dentro de la página: escribes, ejecutas y ves la tabla de resultados al instante.</p>
       <div class="portada-acciones">
@@ -1278,35 +1281,44 @@ const MODULOS = [
  ]
 },
 {
- id:'m9', nivel:'Consultas avanzadas', titulo:'Subconsultas y CTEs: consultas dentro de consultas',
- meta:'Cómo responder preguntas en dos pasos sin perder la cabeza, y cómo escribir SQL que tus colegas puedan leer.',
+ id:'m9', nivel:'Consultas avanzadas', titulo:'Subconsultas: una consulta dentro de otra',
+ meta:'Una sola idea para todo el módulo: la consulta de adentro corre primero y su resultado se pega donde está escrita.',
  bloques:[
-  {t:'p',html:'A veces necesitas un dato intermedio antes de poder responder: "los productos que cuestan más que el promedio" requiere primero calcular el promedio. Una <b>subconsulta</b> es una consulta metida dentro de otra, entre paréntesis.'},
-  {t:'h',txt:'1. Subconsulta escalar: devuelve un solo valor'},
-  {t:'sql',titulo:'Productos por encima del precio promedio',ejecutable:true,sql:"SELECT nombre, precio\nFROM productos\nWHERE precio > (SELECT AVG(precio) FROM productos)\nORDER BY precio DESC;"},
-  {t:'h',txt:'2. Subconsulta de lista: con IN'},
-  {t:'sql',titulo:'Clientas que alguna vez cancelaron',ejecutable:true,sql:"SELECT nombre, ciudad\nFROM clientes\nWHERE cliente_id IN (\n  SELECT cliente_id FROM pedidos WHERE estado = 'cancelado'\n);"},
-  {t:'nota',estilo:'rosa',html:'<b>Cuidado con NOT IN y los NULL.</b> Si la subconsulta devuelve aunque sea un NULL, <code class="en-linea">NOT IN</code> no devuelve ninguna fila. Es un bug silencioso famosísimo. Cuando puedas, prefiere <code class="en-linea">NOT EXISTS</code> o un LEFT JOIN con IS NULL.'},
-  {t:'h',txt:'3. Subconsulta en el FROM: una tabla temporal'},
-  {t:'p',html:'Puedes calcular una tabla y consultarla como si fuera real. Así se calcula el ticket promedio: primero el monto de cada pedido, después el promedio de esos montos.'},
-  {t:'sql',titulo:'Ticket promedio',ejecutable:true,sql:"SELECT ROUND(AVG(monto), 2) AS ticket_promedio\nFROM (\n  SELECT pedido_id, SUM(cantidad * precio_unit) AS monto\n  FROM detalle\n  GROUP BY pedido_id\n) AS por_pedido;"},
-  {t:'nota',html:'Fíjate en el error que evita: <code class="en-linea">AVG(cantidad * precio_unit)</code> daría el promedio por <i>línea de producto</i>, no por pedido. Son métricas distintas y solo una responde la pregunta del negocio.'},
-  {t:'h',txt:'4. CTE con WITH: la versión legible'},
-  {t:'p',html:'Una <b>CTE</b> (common table expression) es la misma idea pero con nombre y arriba del todo. Se lee de arriba hacia abajo como una receta, se puede reutilizar y se depura por partes. En equipos profesionales es el estándar: casi nadie anida subconsultas de tres niveles.'},
-  {t:'sql',titulo:'La misma pregunta, mucho más clara',ejecutable:true,sql:"WITH por_pedido AS (\n  SELECT pedido_id, SUM(cantidad * precio_unit) AS monto\n  FROM detalle\n  GROUP BY pedido_id\n)\nSELECT ROUND(AVG(monto), 2) AS ticket_promedio,\n       ROUND(MAX(monto), 2) AS pedido_mas_grande\nFROM por_pedido;"},
-  {t:'p',html:'Puedes encadenar varias CTEs separadas por coma, y cada una puede usar a la anterior. Esa es la forma profesional de construir un análisis largo.'},
-  {t:'sql',titulo:'Dos CTEs encadenadas',ejecutable:true,sql:"WITH gasto_cliente AS (\n  SELECT pe.cliente_id,\n         SUM(d.cantidad * d.precio_unit) AS gasto\n  FROM pedidos pe\n  JOIN detalle d ON d.pedido_id = pe.pedido_id\n  WHERE pe.estado = 'entregado'\n  GROUP BY pe.cliente_id\n),\nvip AS (\n  SELECT cliente_id, gasto FROM gasto_cliente WHERE gasto > 400\n)\nSELECT c.nombre, c.ciudad, ROUND(v.gasto, 2) AS gasto\nFROM vip v\nJOIN clientes c ON c.cliente_id = v.cliente_id\nORDER BY gasto DESC;"},
-  {t:'h',txt:'5. EXISTS: ¿hay al menos una?'},
+  {t:'p',html:'A veces necesitas un dato antes de poder responder. "Los productos que cuestan más que el promedio" exige saber primero cuál es el promedio. Una <b>subconsulta</b> resuelve eso: es una consulta escrita dentro de otra, entre paréntesis.'},
+  {t:'nota',estilo:'rosa',html:'<b>La única regla:</b> la consulta de adentro corre primero, y su resultado se pega justo donde está escrita. Todo lo demás de este módulo es esa misma idea.'},
+  {t:'h',txt:'Cuando la de adentro devuelve un número'},
+  {t:'p',html:'Mira estas dos consultas. La primera es la que escribes tú. La segunda es lo que SQL termina haciendo por dentro. Ejecuta las dos y compara el resultado.'},
+  {t:'sql',titulo:'Lo que escribes tú',ejecutable:true,sql:"SELECT nombre, precio\nFROM productos\nWHERE precio > (SELECT AVG(precio) FROM productos)\nORDER BY precio DESC;"},
+  {t:'sql',titulo:'Lo que SQL termina haciendo',ejecutable:true,sql:"SELECT nombre, precio\nFROM productos\nWHERE precio > 77.15\nORDER BY precio DESC;"},
+  {t:'p',html:'Las dos devuelven los mismos 5 productos. La diferencia es que el 77.15 se calcula solo: si mañana cambian los precios, la primera sigue bien y la segunda queda vieja. ¿Quieres ver de dónde sale ese número? Ejecuta solo lo de adentro: <code class="en-linea">SELECT AVG(precio) FROM productos</code>.'},
+  {t:'h',txt:'Cuando la de adentro devuelve una lista'},
+  {t:'p',html:'A veces la consulta de adentro no devuelve un número, sino varios valores. La idea no cambia. Lo único que cambia es el operador: contra una lista se usa <code class="en-linea">IN</code>.'},
+  {t:'sql',titulo:'Lo que escribes tú',ejecutable:true,sql:"SELECT nombre, ciudad\nFROM clientes\nWHERE cliente_id IN (\n  SELECT cliente_id FROM pedidos WHERE estado = 'cancelado'\n);"},
+  {t:'sql',titulo:'Lo que SQL termina haciendo',ejecutable:true,sql:"SELECT nombre, ciudad\nFROM clientes\nWHERE cliente_id IN (3, 6);"},
+  {t:'p',html:'Salen Fernanda Luna y Renata Ortiz en las dos. La de adentro encontró a las clientas 3 y 6, y esa lista quedó pegada después del IN.'},
+  {t:'h',txt:'Un cuidado: NOT IN y los valores vacíos'},
+  {t:'p',html:'Con <code class="en-linea">NOT IN</code> hay una trampa famosa. Si la lista contiene aunque sea un NULL, la consulta no devuelve ninguna fila, y tampoco da error. Compruébalo: esta consulta debería mostrar casi todos los productos y no muestra ninguno.'},
+  {t:'sql',titulo:'Un solo NULL vacía todo el resultado',ejecutable:true,sql:"SELECT nombre\nFROM productos\nWHERE producto_id NOT IN (101, 102, NULL);"},
+  {t:'nota',html:'¿Por qué pasa? NULL significa "no sé cuánto vale". SQL no puede asegurar que un producto sea distinto de un valor desconocido, así que descarta todas las filas. Quita el NULL de la lista y vuelve a ejecutar: aparecen 8 productos. Cuando la lista venga de una subconsulta que puede traer vacíos, usa <code class="en-linea">NOT EXISTS</code>, que viene ahora.'},
+  {t:'h',txt:'Cuando solo quieres saber si hay algo'},
+  {t:'p',html:'En el módulo de JOIN aprendiste a encontrar lo que no tiene pareja con LEFT JOIN e IS NULL. <code class="en-linea">EXISTS</code> es la otra forma de hacer esa clase de preguntas. No mira qué devuelve la consulta de adentro, solo si devuelve al menos una fila.'},
   {t:'sql',titulo:'Clientas con alguna reseña de 5 estrellas',ejecutable:true,sql:"SELECT c.nombre\nFROM clientes c\nWHERE EXISTS (\n  SELECT 1 FROM resenas r\n  WHERE r.cliente_id = c.cliente_id AND r.estrellas = 5\n);"},
-  {t:'nota',html:'<code class="en-linea">EXISTS</code> no mira qué devuelve la subconsulta, solo si devuelve algo. Por eso se escribe <code class="en-linea">SELECT 1</code>: el valor da igual. Suele ser más rápido que IN en tablas grandes.'}
+  {t:'nota',html:'Fíjate en <code class="en-linea">r.cliente_id = c.cliente_id</code>: la consulta de adentro usa una columna de la de afuera. Por eso esta es la excepción a la regla: no corre una sola vez, se revisa para cada clienta. Y como solo importa si encuentra algo, se escribe <code class="en-linea">SELECT 1</code>: el valor da igual. Con <code class="en-linea">NOT EXISTS</code> preguntas lo contrario: las que no tienen ninguna.'},
+  {t:'h',txt:'Los nombres, para cuando los oigas'},
+  {t:'tabla',cols:['Le dicen','La de adentro devuelve','Se usa con'],filas:[
+    ['escalar','un solo valor','= &gt; &lt; &gt;= &lt;='],
+    ['de lista','una columna con varios valores','IN, NOT IN'],
+    ['correlacionada','algo distinto para cada fila de afuera','EXISTS, NOT EXISTS']
+  ]},
+  {t:'p',html:'Falta un caso: cuando la de adentro devuelve una tabla entera. Para ese existe una forma mucho más clara de escribirla, y es el módulo que sigue.'}
  ],
  quiz:[
-  {p:'¿Cuál es la ventaja principal de una CTE frente a subconsultas anidadas?',
-   ops:['Es más rápida siempre','Se lee de arriba hacia abajo y se puede reutilizar y depurar por partes','Permite usar más tablas','Es obligatoria desde SQL 2020'],ok:1,
-   exp:'El rendimiento suele ser parecido; la ganancia real es de legibilidad y mantenimiento, que es lo que te piden en un equipo.'},
-  {p:'Para calcular el ticket promedio por pedido, ¿qué haces primero?',
-   ops:['AVG de cantidad por precio_unit directamente','Primero sumas por pedido y después promedias esos montos','Cuentas los pedidos','Ordenas por monto'],ok:1,
-   exp:'Si promedias las líneas, estás promediando productos dentro de pedidos. Hay que agregar en dos niveles.'},
+  {p:'Ejecutas una consulta que tiene una subconsulta entre paréntesis en el WHERE. ¿Qué pasa primero?',
+   ops:['Corre la de afuera y después la de adentro','Corre la de adentro y su resultado se usa en la de afuera','Corren las dos a la vez y se comparan','Depende del orden en que las escribiste'],ok:1,
+   exp:'La de adentro corre primero y su resultado queda pegado en su lugar. Por eso puedes ejecutarla sola para ver qué devuelve.'},
+  {p:'La consulta de adentro devuelve varios valores. ¿Con qué operador la comparas?',
+   ops:['Con el signo igual','Con el signo mayor que','Con IN','Con LIKE'],ok:2,
+   exp:'El signo igual solo sirve contra un valor. Contra una lista de valores se usa IN.'},
   {p:'¿Por qué NOT IN puede fallar silenciosamente?',
    ops:['Porque no funciona con texto','Porque si la lista contiene un NULL no devuelve ninguna fila','Porque es lento','Porque necesita ORDER BY'],ok:1,
    exp:'Comparar contra un valor desconocido nunca da verdadero, así que toda la condición se cae. NOT EXISTS no tiene ese problema.'}
@@ -1316,14 +1328,62 @@ const MODULOS = [
    pista:'El promedio se calcula con una subconsulta entre paréntesis dentro del WHERE.',
    sintaxis:'WHERE columna < (SELECT AVG(columna) FROM tabla)',
    solucion:'SELECT nombre, stock FROM productos WHERE stock < (SELECT AVG(stock) FROM productos)',inicial:'',ordenado:false},
-  {id:'m9e2',consigna:'Usando una CTE llamada por_cliente, calcula cuántos pedidos hizo cada clienta y muestra nombre y pedidos solo de quienes hicieron 3 o más, de mayor a menor.',
-   pista:'En la CTE agrupas pedidos por cliente_id. Afuera unes con clientes y filtras con WHERE sobre la columna ya calculada.',
-   sintaxis:'WITH nombre_cte AS ( ... ) SELECT ... FROM nombre_cte JOIN tabla ON ... WHERE ... ORDER BY ...;',
-   solucion:'WITH por_cliente AS (SELECT cliente_id, COUNT(*) AS pedidos FROM pedidos GROUP BY cliente_id) SELECT c.nombre, p.pedidos FROM por_cliente p JOIN clientes c ON c.cliente_id = p.cliente_id WHERE p.pedidos >= 3 ORDER BY p.pedidos DESC',inicial:'WITH por_cliente AS (\n  SELECT ',ordenado:true},
+  {id:'m9e4',consigna:'Muestra nombre y categoria de los productos que recibieron alguna reseña de 3 estrellas o menos. Ordena por nombre.',
+   pista:'La consulta de adentro devuelve la lista de producto_id con reseñas bajas. Afuera filtras productos con IN.',
+   sintaxis:'WHERE columna IN (SELECT columna FROM otra_tabla WHERE condicion)',
+   solucion:'SELECT nombre, categoria FROM productos WHERE producto_id IN (SELECT producto_id FROM resenas WHERE estrellas <= 3) ORDER BY nombre',inicial:'',ordenado:true},
   {id:'m9e3',consigna:'Lista el nombre de las clientas que NO tienen ninguna reseña escrita, usando NOT EXISTS. Ordena alfabéticamente.',
    pista:'Dentro del NOT EXISTS, conecta la subconsulta con la consulta de afuera comparando cliente_id.',
    sintaxis:'WHERE NOT EXISTS (SELECT 1 FROM otra o WHERE o.clave = t.clave)',
    solucion:'SELECT c.nombre FROM clientes c WHERE NOT EXISTS (SELECT 1 FROM resenas r WHERE r.cliente_id = c.cliente_id) ORDER BY c.nombre',inicial:'',ordenado:true}
+ ]
+},
+{
+ id:'m9b', nivel:'Consultas avanzadas', titulo:'CTEs: resolver una pregunta por pasos',
+ meta:'Cómo ponerle nombre a un paso intermedio para que tu consulta se lea de arriba hacia abajo, como una receta.',
+ bloques:[
+  {t:'p',html:'En el módulo anterior la consulta de adentro devolvía un número o una lista. Cuando devuelve una tabla entera, meterla entre paréntesis se vuelve difícil de leer. Para eso existe la <b>CTE</b>: le pones nombre a ese paso, lo escribes arriba, y después lo usas como si fuera una tabla más.'},
+  {t:'h',txt:'Una CTE es un paso con nombre'},
+  {t:'p',html:'Se escribe <code class="en-linea">WITH nombre AS ( ... )</code>. Lo que va entre paréntesis es una consulta normal. Debajo, la consulta principal usa ese nombre en el FROM.'},
+  {t:'sql',titulo:'Paso 1: unidades vendidas por producto. Paso 2: quedarse con los más vendidos',ejecutable:true,sql:"WITH por_producto AS (\n  SELECT producto_id, SUM(cantidad) AS unidades\n  FROM detalle\n  GROUP BY producto_id\n)\nSELECT p.nombre, v.unidades\nFROM por_producto v\nJOIN productos p ON p.producto_id = v.producto_id\nWHERE v.unidades >= 5\nORDER BY v.unidades DESC;"},
+  {t:'nota',html:'Léela en el orden en que corre: primero la CTE (¿qué tabla arma?) y después la consulta de abajo (¿qué hace con esa tabla?). Si algo sale raro, ejecuta solo lo que está dentro del paréntesis y revisa ese paso por separado. Esa es la gran ventaja: cada paso se puede probar solo.'},
+  {t:'h',txt:'Varios pasos encadenados'},
+  {t:'p',html:'Puedes escribir varias CTEs separadas por coma, y cada una puede usar a la anterior. Así se construye un análisis largo sin perderse: un paso, un nombre.'},
+  {t:'sql',titulo:'Paso 1: gasto por clienta. Paso 2: las que gastaron más de 400. Paso 3: sus nombres',ejecutable:true,sql:"WITH gasto_cliente AS (\n  SELECT pe.cliente_id,\n         SUM(d.cantidad * d.precio_unit) AS gasto\n  FROM pedidos pe\n  JOIN detalle d ON d.pedido_id = pe.pedido_id\n  WHERE pe.estado = 'entregado'\n  GROUP BY pe.cliente_id\n),\nvip AS (\n  SELECT cliente_id, gasto FROM gasto_cliente WHERE gasto > 400\n)\nSELECT c.nombre, c.ciudad, ROUND(v.gasto, 2) AS gasto\nFROM vip v\nJOIN clientes c ON c.cliente_id = v.cliente_id\nORDER BY gasto DESC;"},
+  {t:'h',txt:'La misma idea, escrita en el FROM'},
+  {t:'p',html:'Ese paso intermedio también se puede escribir sin nombre arriba, metido entre paréntesis dentro del FROM. Es una subconsulta como las del módulo anterior, solo que devuelve una tabla. Hace exactamente lo mismo que la primera CTE de este módulo:'},
+  {t:'sql',titulo:'Los más vendidos, con subconsulta en el FROM',ejecutable:true,sql:"SELECT p.nombre, v.unidades\nFROM (\n  SELECT producto_id, SUM(cantidad) AS unidades\n  FROM detalle\n  GROUP BY producto_id\n) AS v\nJOIN productos p ON p.producto_id = v.producto_id\nWHERE v.unidades >= 5\nORDER BY v.unidades DESC;"},
+  {t:'nota',html:'Vas a ver esta forma en código ajeno, así que conviene reconocerla. Pero fíjate que hay que leerla de adentro hacia afuera. Cuando escribas tú, la CTE casi siempre queda más clara, y por eso es lo habitual en equipos de datos.'},
+  {t:'h',txt:'El error que los pasos te ayudan a evitar'},
+  {t:'p',html:'¿Cuánto gasta una clienta en promedio por pedido? Eso se llama <b>ticket promedio</b>. Parece un AVG y listo, pero hay una trampa: la tabla <code class="en-linea">detalle</code> tiene una fila por cada producto de un pedido, no una fila por pedido.'},
+  {t:'sql',titulo:'La forma equivocada: promedia líneas de producto',ejecutable:true,sql:"SELECT ROUND(AVG(cantidad * precio_unit), 2) AS ticket_promedio\nFROM detalle;"},
+  {t:'sql',titulo:'La forma correcta: primero sumar por pedido, después promediar',ejecutable:true,sql:"WITH por_pedido AS (\n  SELECT pedido_id, SUM(cantidad * precio_unit) AS monto\n  FROM detalle\n  GROUP BY pedido_id\n)\nSELECT ROUND(AVG(monto), 2) AS ticket_promedio,\n       ROUND(MAX(monto), 2) AS pedido_mas_grande\nFROM por_pedido;"},
+  {t:'nota',estilo:'rosa',html:'La primera da 105.24 y la segunda 147.34. Ninguna da error, pero solo la segunda responde la pregunta. Cada vez que una métrica necesite dos niveles, primero agrupar y después resumir, escríbela en dos pasos.'}
+ ],
+ quiz:[
+  {p:'¿Cuál es la ventaja principal de una CTE frente a subconsultas anidadas?',
+   ops:['Es más rápida siempre','Se lee de arriba hacia abajo y se puede reutilizar y depurar por partes','Permite usar más tablas','Es obligatoria desde SQL 2020'],ok:1,
+   exp:'El rendimiento suele ser parecido; la ganancia real es de legibilidad y mantenimiento, que es lo que te piden en un equipo.'},
+  {p:'Para calcular el ticket promedio por pedido, ¿qué haces primero?',
+   ops:['AVG de cantidad por precio_unit directamente','Primero sumas por pedido y después promedias esos montos','Cuentas los pedidos','Ordenas por monto'],ok:1,
+   exp:'Si promedias las líneas, estás promediando productos dentro de pedidos. Hay que agregar en dos niveles.'},
+  {p:'¿Qué diferencia hay entre una CTE y una subconsulta escrita en el FROM?',
+   ops:['La CTE devuelve más filas','El resultado es el mismo: cambia dónde se escribe el paso, y que la CTE lleva nombre','La subconsulta en el FROM siempre es más rápida','La CTE no puede usar GROUP BY'],ok:1,
+   exp:'Son dos formas de escribir el mismo paso intermedio. La CTE va arriba y con nombre, por eso se lee mejor.'}
+ ],
+ ejercicios:[
+  {id:'m9e2',consigna:'Usando una CTE llamada por_cliente, calcula cuántos pedidos hizo cada clienta y muestra nombre y pedidos solo de quienes hicieron 3 o más, de mayor a menor.',
+   pista:'En la CTE agrupas pedidos por cliente_id. Afuera unes con clientes y filtras con WHERE sobre la columna ya calculada.',
+   sintaxis:'WITH nombre_cte AS ( ... ) SELECT ... FROM nombre_cte JOIN tabla ON ... WHERE ... ORDER BY ...;',
+   solucion:'WITH por_cliente AS (SELECT cliente_id, COUNT(*) AS pedidos FROM pedidos GROUP BY cliente_id) SELECT c.nombre, p.pedidos FROM por_cliente p JOIN clientes c ON c.cliente_id = p.cliente_id WHERE p.pedidos >= 3 ORDER BY p.pedidos DESC',inicial:'WITH por_cliente AS (\n  SELECT ',ordenado:true},
+  {id:'m9be1',consigna:'Usando una CTE llamada por_pedido, calcula el monto de cada pedido (cantidad por precio_unit, sumado) y muestra pedido_id y monto de los pedidos que superan 200, de mayor a menor.',
+   pista:'En la CTE agrupas detalle por pedido_id y sumas. Afuera solo filtras y ordenas sobre la columna monto.',
+   sintaxis:'WITH por_pedido AS (SELECT clave, SUM(a * b) AS monto FROM tabla GROUP BY clave) SELECT ... FROM por_pedido WHERE monto > ... ORDER BY monto DESC;',
+   solucion:'WITH por_pedido AS (SELECT pedido_id, SUM(cantidad * precio_unit) AS monto FROM detalle GROUP BY pedido_id) SELECT pedido_id, monto FROM por_pedido WHERE monto > 200 ORDER BY monto DESC',inicial:'WITH por_pedido AS (\n  SELECT ',ordenado:true},
+  {id:'m9be2',consigna:'¿Cuántos pedidos hace una clienta en promedio? Usa una CTE llamada por_clienta que cuente los pedidos de cada clienta y, afuera, promedia ese conteo. Muestra una sola columna llamada promedio_pedidos, redondeada a 2 decimales.',
+   pista:'Son dos niveles: primero COUNT por cliente_id dentro de la CTE, después AVG de ese conteo afuera.',
+   sintaxis:'WITH por_clienta AS (SELECT clave, COUNT(*) AS pedidos FROM tabla GROUP BY clave) SELECT ROUND(AVG(pedidos), 2) AS promedio_pedidos FROM por_clienta;',
+   solucion:'WITH por_clienta AS (SELECT cliente_id, COUNT(*) AS pedidos FROM pedidos GROUP BY cliente_id) SELECT ROUND(AVG(pedidos), 2) AS promedio_pedidos FROM por_clienta',inicial:'',ordenado:false}
  ]
 },
 {
@@ -1798,6 +1858,15 @@ let PROGRESO = {};
 function cargarProgreso(){
   try{ const c = localStorage.getItem(CLAVE); PROGRESO = c ? JSON.parse(c) : {}; }catch(e){ PROGRESO = {}; }
   if(typeof PROGRESO !== 'object' || !PROGRESO) PROGRESO = {};
+  // El antiguo modulo 9 se partio en dos: sus dos primeras preguntas pasaron al modulo de CTEs.
+  try{
+    if(!localStorage.getItem('sqlglow.migr.m9b')){
+      if(PROGRESO.m9q0){ PROGRESO.m9bq0 = PROGRESO.m9q0; delete PROGRESO.m9q0; }
+      if(PROGRESO.m9q1){ PROGRESO.m9bq1 = PROGRESO.m9q1; delete PROGRESO.m9q1; }
+      localStorage.setItem('sqlglow.migr.m9b','1');
+      localStorage.setItem(CLAVE, JSON.stringify(PROGRESO));
+    }
+  }catch(e){}
 }
 function guardarProgreso(){ try{ localStorage.setItem(CLAVE, JSON.stringify(PROGRESO)); }catch(e){} }
 function marcar(id){ if(!PROGRESO[id]){ PROGRESO[id]=1; guardarProgreso(); pintarProgreso(); try{ if(typeof RANA!=='undefined') RANA.marcarHoy(); }catch(e){} } }
@@ -2911,9 +2980,12 @@ else iniciar();
   function enviar(msg){try{if(window.parent&&window.parent!==window)window.parent.postMessage(msg,"*");}catch(e){}}
   function resumen(){
     var tot=totalItems(),hechos=Object.keys(PROGRESO).length,m=MODULOS[actual]||MODULOS[0];
-    var completos=MODULOS.filter(moduloCompleto).length;
+    // El reto final es un extra: no cuenta como modulo de la ruta.
+    var RUTA=MODULOS.filter(function(x){return x.id!=='reto';});
+    var completos=RUTA.filter(moduloCompleto).length;
     var sig=MODULOS.find(function(x){return !moduloCompleto(x);})||MODULOS[MODULOS.length-1];
-    return {hechos:Math.min(hechos,tot),total:tot,pct:Math.min(100,Math.round(100*hechos/tot)),modulos:MODULOS.length,completos:completos,
+    return {hechos:Math.min(hechos,tot),total:tot,pct:Math.min(100,Math.round(100*hechos/tot)),modulos:RUTA.length,completos:completos,
+      ids:MODULOS.filter(moduloCompleto).map(function(x){return x.id;}),
       actual:m.id,siguiente:sig.id,siguienteTitulo:sig.titulo,siguienteN:MODULOS.indexOf(sig)+1,fecha:new Date().toISOString().slice(0,10)};
   }
   function reportar(){

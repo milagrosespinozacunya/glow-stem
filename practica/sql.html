@@ -135,6 +135,7 @@ button{font-family:inherit;font-size:1rem;cursor:pointer}
 .bloque > * + h3{margin-top:28px}
 .bloque > h3 + p{margin-top:8px}
 .bloque > div + p{margin-top:14px}
+.bloque > ul + p,.bloque > ol + p{margin-top:12px}
 .lista{margin:10px 0 0;padding-left:0;list-style:none;display:grid;gap:9px}
 .lista li{position:relative;padding-left:24px;color:var(--tinta)}
 .lista li::before{content:"✦";position:absolute;left:4px;top:0;color:var(--oro);font-size:.85rem}
@@ -1303,7 +1304,19 @@ const MODULOS = [
   {t:'h',txt:'Cuando solo quieres saber si hay algo'},
   {t:'p',html:'En el módulo de JOIN aprendiste a encontrar lo que no tiene pareja con LEFT JOIN e IS NULL. <code class="en-linea">EXISTS</code> es la otra forma de hacer esa clase de preguntas. No mira qué devuelve la consulta de adentro, solo si devuelve al menos una fila.'},
   {t:'sql',titulo:'Clientas con alguna reseña de 5 estrellas',ejecutable:true,sql:"SELECT c.nombre\nFROM clientes c\nWHERE EXISTS (\n  SELECT 1 FROM resenas r\n  WHERE r.cliente_id = c.cliente_id AND r.estrellas = 5\n);"},
-  {t:'nota',html:'Fíjate en <code class="en-linea">r.cliente_id = c.cliente_id</code>: la consulta de adentro usa una columna de la de afuera. Por eso esta es la excepción a la regla: no corre una sola vez, se revisa para cada clienta. Y como solo importa si encuentra algo, se escribe <code class="en-linea">SELECT 1</code>: el valor da igual. Con <code class="en-linea">NOT EXISTS</code> preguntas lo contrario: las que no tienen ninguna.'},
+  {t:'p',html:'<b>Cómo leerla: son dos capas.</b> La de afuera decide qué ves. Como dice <code class="en-linea">SELECT c.nombre</code>, en pantalla solo aparecen nombres de clientas. La de adentro nunca se muestra: solo le responde sí o no al WHERE, una vez por cada clienta.'},
+  {t:'lista',items:[
+    '¿Valeria Ríos tiene alguna reseña de 5 estrellas? La de adentro encuentra una fila. EXISTS dice sí, y Valeria pasa al resultado.',
+    '¿Camila Soto? Tiene reseñas, pero ninguna de 5. La de adentro no encuentra filas. EXISTS dice no, y Camila queda fuera.'
+  ]},
+  {t:'p',html:'Por eso se escribe <code class="en-linea">SELECT 1</code>: lo que devuelve la de adentro no llega a tu pantalla, así que da igual qué pongas. Solo importa si encontró algo.'},
+  {t:'nota',html:'La línea <code class="en-linea">r.cliente_id = c.cliente_id</code> conecta las dos capas. Le dice a la de adentro: "busca solo las reseñas de la clienta que estoy revisando ahora". Sin esa línea, la respuesta sería sí para todas. También por eso esta es la excepción a la regla del inicio: la de adentro no corre una sola vez, se revisa para cada fila de afuera.'},
+  {t:'h',txt:'NOT EXISTS: quedarte con las que no tienen ninguna'},
+  {t:'p',html:'El <code class="en-linea">NOT</code> da vuelta la respuesta: la fila pasa cuando la de adentro <b>no</b> encuentra nada.'},
+  {t:'sql',titulo:'Productos que nadie ha reseñado',ejecutable:true,sql:"SELECT p.nombre\nFROM productos p\nWHERE NOT EXISTS (\n  SELECT 1 FROM resenas r\n  WHERE r.producto_id = p.producto_id\n);"},
+  {t:'p',html:'Salen Tónico Rosas y Contorno de Ojos. Para cada producto, la de adentro buscó sus reseñas. En esos dos no encontró ninguna, y por eso pasaron.'},
+  {t:'nota',estilo:'rosa',html:'<b>No hace falta escribir una condición para "cero reseñas".</b> En la tabla no existe una fila que diga "este producto tiene 0 reseñas": simplemente no hay filas, y eso es justo lo que NOT EXISTS detecta. Adentro solo describes qué buscas, y el NOT se encarga del "no hay".'},
+  {t:'p',html:'<b>¿Cuándo sí va un AND adentro?</b> Cuando quieres limitar qué filas cuentan. En el ejemplo de las 5 estrellas, <code class="en-linea">AND r.estrellas = 5</code> significaba "solo me valen las reseñas de 5 estrellas". Si lo quitas, la pregunta pasa a ser "¿tiene alguna reseña, la que sea?".'},
   {t:'h',txt:'Los nombres, para cuando los oigas'},
   {t:'tabla',cols:['Le dicen','La de adentro devuelve','Se usa con'],filas:[
     ['escalar','un solo valor','= &gt; &lt; &gt;= &lt;='],
@@ -1333,7 +1346,7 @@ const MODULOS = [
    sintaxis:'WHERE columna IN (SELECT columna FROM otra_tabla WHERE condicion)',
    solucion:'SELECT nombre, categoria FROM productos WHERE producto_id IN (SELECT producto_id FROM resenas WHERE estrellas <= 3) ORDER BY nombre',inicial:'',ordenado:true},
   {id:'m9e3',consigna:'Lista el nombre de las clientas que NO tienen ninguna reseña escrita, usando NOT EXISTS. Ordena alfabéticamente.',
-   pista:'Dentro del NOT EXISTS, conecta la subconsulta con la consulta de afuera comparando cliente_id.',
+   pista:'Es el mismo patrón del ejemplo de los productos sin reseñas, cambiando productos por clientes. Adentro solo conectas las dos capas comparando cliente_id: no necesitas ninguna condición más.',
    sintaxis:'WHERE NOT EXISTS (SELECT 1 FROM otra o WHERE o.clave = t.clave)',
    solucion:'SELECT c.nombre FROM clientes c WHERE NOT EXISTS (SELECT 1 FROM resenas r WHERE r.cliente_id = c.cliente_id) ORDER BY c.nombre',inicial:'',ordenado:true}
  ]
@@ -1391,6 +1404,7 @@ const MODULOS = [
  meta:'La herramienta que separa a quien sabe SQL de quien sabe SQL de verdad. Agregas sin perder las filas.',
  bloques:[
   {t:'p',html:'Con <code class="en-linea">GROUP BY</code> pierdes el detalle: 10 productos se convierten en 6 categorías. Una <b>función de ventana</b> calcula un valor agregado <i>y conserva todas las filas</i>. Puedes ver el precio de cada producto junto al promedio de su categoría, en la misma fila.'},
+  {t:'nota',estilo:'rosa',html:'<b>Antes de empezar:</b> el mini motor SQL de esta página no implementa funciones de ventana, así que las consultas de este módulo no tienen botón Ejecutar. Están para leer y entender. Practícalas en el simulador de más abajo y, en los ejercicios, escribe tu consulta, compárala con la solución y márcala con "Lo escribí". En PostgreSQL o BigQuery funcionan tal cual.'},
   {t:'sql',titulo:'La forma general',sql:"FUNCION() OVER (\n  PARTITION BY columna   -- opcional: en qué grupos dividir\n  ORDER BY columna       -- opcional: en qué orden numerar o acumular\n)"},
   {t:'lista',items:[
     '<b>PARTITION BY</b> divide la tabla en ventanas. Si lo omites, la ventana es la tabla entera.',
@@ -1413,8 +1427,9 @@ const MODULOS = [
   {t:'p',html:'No se puede filtrar una función de ventana en el WHERE (se calcula después). La solución es envolverla en una subconsulta o CTE y filtrar afuera. Este patrón aparece en casi toda entrevista de datos:'},
   {t:'sql',titulo:'El producto más caro de cada categoría',sql:"WITH ranking AS (\n  SELECT nombre,\n         categoria,\n         precio,\n         ROW_NUMBER() OVER (\n           PARTITION BY categoria\n           ORDER BY precio DESC\n         ) AS puesto\n  FROM productos\n)\nSELECT categoria, nombre, precio\nFROM ranking\nWHERE puesto = 1\nORDER BY categoria;"},
   {t:'h',txt:'Crecimiento mes a mes con LAG'},
+  {t:'p',html:'<code class="en-linea">LAG(columna)</code> trae el valor de la fila anterior, según el orden que indiques en el OVER. La consulta tiene dos pasos. Primero una CTE arma el ingreso de cada mes: <code class="en-linea">SUBSTR(fecha, 1, 7)</code> recorta la fecha y se queda con "2025-04" (lo verás con calma en el módulo de fechas). Después, al lado de cada mes, LAG pone el ingreso del mes anterior. Con los dos números en la misma fila, la variación es una resta y una división.'},
   {t:'sql',titulo:'Comparar cada mes con el anterior',sql:"WITH ventas_mes AS (\n  SELECT SUBSTR(fecha, 1, 7) AS mes,\n         SUM(cantidad * precio_unit) AS ingreso\n  FROM pedidos pe\n  JOIN detalle d ON d.pedido_id = pe.pedido_id\n  GROUP BY SUBSTR(fecha, 1, 7)\n)\nSELECT mes,\n       ingreso,\n       LAG(ingreso) OVER (ORDER BY mes) AS mes_anterior,\n       ROUND(100.0 * (ingreso - LAG(ingreso) OVER (ORDER BY mes))\n             / LAG(ingreso) OVER (ORDER BY mes), 1) AS variacion_pct\nFROM ventas_mes\nORDER BY mes;"},
-  {t:'nota',estilo:'rosa',html:'<b>Nota sobre esta página:</b> el mini motor SQL que corre dentro del navegador no implementa funciones de ventana completas, así que estas dos consultas están para leer y entender, no para ejecutar. Practícalas en el simulador de arriba y, cuando instales PostgreSQL o uses BigQuery, funcionarán tal cual.'}
+  {t:'nota',html:'El primer mes no tiene mes anterior, así que su LAG sale vacío (NULL) y su variación también. Es lo correcto: no hay contra qué comparar.'}
  ],
  quiz:[
   {p:'¿Cuál es la diferencia clave entre GROUP BY y una función de ventana?',
@@ -1494,6 +1509,8 @@ const MODULOS = [
   ]},
   {t:'sql',titulo:'Vacíos tratados con cuidado',ejecutable:true,sql:"SELECT resena_id,\n       COALESCE(comentario, 'sin comentario') AS comentario,\n       CASE WHEN comentario IS NULL THEN 0 ELSE 1 END AS tiene_texto\nFROM resenas;"},
   {t:'nota',estilo:'rosa',html:'<b>Decidir no es rellenar por rellenar.</b> Poner cero donde falta un precio cambia el promedio y miente. Pregúntate siempre: ¿este NULL significa "cero" o significa "no sabemos"? Si es lo segundo, déjalo NULL y repórtalo aparte.'},
+  {t:'p',html:'<code class="en-linea">NULLIF</code> hace lo contrario de COALESCE: convierte un valor en NULL. Su uso estrella es proteger una división. Contorno de Ojos tiene stock 0, y dividir entre cero detiene la consulta con un error en PostgreSQL o MySQL. Con <code class="en-linea">NULLIF(stock, 0)</code> ese cero pasa a ser NULL, la división da NULL y el resto de la tabla sale bien.'},
+  {t:'sql',titulo:'Unidades vendidas por cada unidad en stock, sin riesgo de dividir entre cero',ejecutable:true,sql:"SELECT p.nombre,\n       p.stock,\n       COALESCE(SUM(d.cantidad), 0) AS vendidas,\n       ROUND(1.0 * COALESCE(SUM(d.cantidad), 0)\n             / NULLIF(p.stock, 0), 2) AS vendidas_por_stock\nFROM productos p\nLEFT JOIN detalle d ON d.producto_id = p.producto_id\nGROUP BY p.nombre, p.stock\nORDER BY p.stock;"},
   {t:'h',txt:'2. Detectar duplicados'},
   {t:'p',html:'El patrón universal: agrupa por las columnas que deberían ser únicas y quédate con los grupos de más de una fila. Si devuelve filas, tienes duplicados.'},
   {t:'sql',titulo:'¿Hay más de una reseña de la misma clienta al mismo producto?',ejecutable:true,sql:"SELECT cliente_id, producto_id, COUNT(*) AS veces\nFROM resenas\nGROUP BY cliente_id, producto_id\nHAVING COUNT(*) > 1;"},
@@ -1542,6 +1559,9 @@ const MODULOS = [
   {t:'h',txt:'3. Cohortes: agrupar por mes de entrada'},
   {t:'p',html:'Una <b>cohorte</b> es un grupo de personas que empezaron a la vez. Comparar cohortes te dice si las clientas nuevas se comportan mejor o peor que las de hace seis meses, algo que el promedio general esconde.'},
   {t:'sql',titulo:'Tamaño de cada cohorte de registro',ejecutable:true,sql:"SELECT SUBSTR(fecha_registro, 1, 7) AS cohorte,\n       COUNT(*) AS clientas\nFROM clientes\nGROUP BY SUBSTR(fecha_registro, 1, 7)\nORDER BY cohorte;"},
+  {t:'p',html:'Contar cuántas entraron es solo el primer paso. Lo que le da valor a una cohorte es compararla con las demás. Aquí cruzamos cada cohorte con sus pedidos. El <code class="en-linea">LEFT JOIN</code> conserva a las clientas que nunca compraron, para que el promedio no salga inflado.'},
+  {t:'sql',titulo:'Pedidos por clienta, según el mes en que se registró',ejecutable:true,sql:"SELECT SUBSTR(c.fecha_registro, 1, 7) AS cohorte,\n       COUNT(DISTINCT c.cliente_id) AS clientas,\n       COUNT(pe.pedido_id) AS pedidos,\n       ROUND(1.0 * COUNT(pe.pedido_id)\n             / COUNT(DISTINCT c.cliente_id), 2) AS pedidos_por_clienta\nFROM clientes c\nLEFT JOIN pedidos pe ON pe.cliente_id = c.cliente_id\nGROUP BY SUBSTR(c.fecha_registro, 1, 7)\nORDER BY cohorte;"},
+  {t:'nota',html:'Las cohortes más antiguas tienen más pedidos por clienta. Antes de concluir que las nuevas son peores, recuerda que también llevan menos tiempo comprando. Leer una cohorte siempre es comparar grupos que tuvieron la misma cantidad de tiempo.'},
   {t:'h',txt:'4. Recompra y retención'},
   {t:'p',html:'La métrica más barata de calcular y de las más valiosas: qué porcentaje de clientas volvió a comprar. Se arma en dos pasos, por eso la CTE.'},
   {t:'sql',titulo:'Clientas recurrentes',ejecutable:true,sql:"WITH por_cliente AS (\n  SELECT cliente_id, COUNT(*) AS pedidos\n  FROM pedidos\n  GROUP BY cliente_id\n)\nSELECT COUNT(*) AS clientas_con_pedido,\n       SUM(CASE WHEN pedidos >= 2 THEN 1 ELSE 0 END) AS recurrentes,\n       ROUND(100.0 * SUM(CASE WHEN pedidos >= 2 THEN 1 ELSE 0 END)\n             / COUNT(*), 1) AS tasa_recompra_pct\nFROM por_cliente;"},
@@ -1632,7 +1652,18 @@ const MODULOS = [
    ops:['Bajar todo a pandas y hacer groupby','Agregar en SQL y traer solo el resultado','Exportar a Excel','Usar un bucle en Python'],ok:1,
    exp:'El motor está optimizado para eso y evita mover datos innecesarios por la red. Python recibe una tabla pequeña y lista.'}
  ],
- ejercicios:[]
+ ejercicios:[
+  {id:'m14e1',consigna:'Esta consulta quiere contar cuántos pedidos tiene cada canal, pero al unir con detalle cuenta líneas de producto y los números salen inflados. Corrígela para que cuente pedidos. Columnas canal y pedidos, de mayor a menor.',
+   pista:'Es el primer error de la tabla de este módulo: después de un JOIN las filas se multiplican. Cuenta los pedido_id distintos.',
+   sintaxis:'COUNT(DISTINCT tabla.columna) AS alias',
+   solucion:'SELECT pe.canal, COUNT(DISTINCT pe.pedido_id) AS pedidos FROM pedidos pe JOIN detalle d ON d.pedido_id = pe.pedido_id GROUP BY pe.canal ORDER BY pedidos DESC',
+   inicial:'SELECT pe.canal, COUNT(*) AS pedidos\nFROM pedidos pe\nJOIN detalle d ON d.pedido_id = pe.pedido_id\nGROUP BY pe.canal\nORDER BY pedidos DESC',ordenado:true},
+  {id:'m14e2',consigna:'Esta consulta busca a las clientas de Lima o Arequipa que tengan membresía glow, pero trae clientas de más. Corrígela. Columnas nombre, ciudad y membresia, ordenadas por nombre.',
+   pista:'AND se evalúa antes que OR, así que la condición de membresía solo se le está aplicando a Arequipa. Agrupa las dos ciudades con paréntesis.',
+   sintaxis:"WHERE (col = 'a' OR col = 'b') AND col2 = 'c'",
+   solucion:"SELECT nombre, ciudad, membresia FROM clientes WHERE (ciudad = 'Lima' OR ciudad = 'Arequipa') AND membresia = 'glow' ORDER BY nombre",
+   inicial:"SELECT nombre, ciudad, membresia\nFROM clientes\nWHERE ciudad = 'Lima' OR ciudad = 'Arequipa' AND membresia = 'glow'\nORDER BY nombre",ordenado:true}
+ ]
 },
 {
  id:'reto', nivel:'Reto final', titulo:'Reto final: cinco preguntas de negocio',
@@ -2133,6 +2164,7 @@ function bloqueEjercicio(ej, indice){
     const bHecho = crear('button','btn chico','✓ Lo escribí'); bHecho.type='button';
     bHecho.addEventListener('click',()=>{
       marcar(ej.id);
+      if(window.ranitaEvento) ranitaEvento('acierto', ej.id);
       if(!$('.insignia',titulo)) titulo.appendChild(crear('span','insignia','✓ resuelto'));
       salida.classList.remove('oculto');
       salida.innerHTML = '<p class="mensaje ok"><b>Anotado.</b> Compara tu consulta con la solución: lo importante es que la ventana (PARTITION BY y ORDER BY) sea la correcta.</p>';
@@ -3064,7 +3096,7 @@ else iniciar();
     }
     if(typeof RANA==="undefined")return;
     var nuevas=RANA.recalcular({ejercicios:pr.hechos||0,modulos:pr.completos||0});
-    if(!nuevas.length)return;
+    if(!nuevas.length)return false;
     var g=RANA.estado(),p=g.puestas||{},cambio=false;
     nuevas.forEach(function(id){var sl=RANA.ACC[id]&&RANA.ACC[id].slot;if(sl&&!p[sl]){p[sl]=id;cambio=true;}});
     if(cambio)RANA.guardar({puestas:p});
@@ -3075,7 +3107,54 @@ else iniciar();
         : ("\u00a1Desbloqueaste "+n+"! Te espera en tu armario, en Mi progreso."));
       pintarRanita();
     },2800);
+    return true;
   }
+  /* ---- cada dos ejercicios resueltos, la ranita celebra y cuenta cuanto falta ---- */
+  function ejResueltos(){
+    var n=0;
+    try{MODULOS.forEach(function(m){(m.ejercicios||[]).forEach(function(e){if(PROGRESO[e.id])n++;});});}catch(e){}
+    return n;
+  }
+  function nombresPiezas(b){
+    return b.piezas.map(function(id){return RANA.ACC[id]?RANA.ACC[id].nombre.toLowerCase():id;}).join(" y ");
+  }
+  function loQueFalta(){
+    var pr={};try{pr=JSON.parse(localStorage.getItem("edutech-practica-sql")||"{}")||{};}catch(e){}
+    var hechos=pr.completos||0, ids={}, i;
+    (pr.ids||[]).forEach(function(x){ids[x]=1;});
+    /* 1. piezas que se ganan aqui mismo, practicando */
+    if(typeof RANA!=="undefined"){
+      var tengo=RANA.estado().piezas||[];
+      for(i=0;i<RANA.BLOQUES.length;i++){
+        var b=RANA.BLOQUES[i];
+        if(b.campo!=="modulos"||tengo.indexOf(b.piezas[0])>=0)continue;
+        var k=b.meta-hechos; if(k<=0)continue;
+        return k===1 ? ("Te falta cerrar 1 módulo para desbloquear "+nombresPiezas(b)+".")
+                     : ("Te faltan "+k+" módulos para desbloquear "+nombresPiezas(b)+".");
+      }
+    }
+    /* 2. la siguiente constancia */
+    var niveles=[["básico",["m1","m2","m3","m4","m5"]],
+                 ["intermedio",["m6","m7","m8"]],
+                 ["avanzado",["m9","m9b","m10","m11","m12","m13","m14"]]];
+    var faltan=0;
+    for(i=0;i<niveles.length;i++){
+      niveles[i][1].forEach(function(x){if(!ids[x])faltan++;});
+      if(faltan>0) return faltan===1 ? ("Te falta 1 módulo para tu constancia de nivel "+niveles[i][0]+".")
+                                     : ("Te faltan "+faltan+" módulos para tu constancia de nivel "+niveles[i][0]+".");
+    }
+    return ids.reto ? "Ya lo resolviste todo. Qué orgullo." : "Ya completaste los 15 módulos. Solo queda el reto final.";
+  }
+  var ejAntes=null;
+  function celebrarAvance(huboPieza){
+    var n=ejResueltos();
+    if(ejAntes===null){ejAntes=n;return;}
+    if(n<=ejAntes)return;            /* volver a revisar uno ya resuelto no cuenta */
+    ejAntes=n;
+    if(huboPieza||n%2!==0)return;    /* si acaba de ganar una pieza, ese aviso manda */
+    decirLibre("\u00a1Ya van "+n+" ejercicios resueltos! "+loQueFalta());
+  }
+  setTimeout(function(){if(ejAntes===null)ejAntes=ejResueltos();},0);
   window.ranitaEvento=function(tipo,id){
     if(tipo==="error"){
       fallos[id]=(fallos[id]||0)+1;
@@ -3084,7 +3163,7 @@ else iniciar();
       fallos[id]=0;fallos["ejec"]=0;
       if(!yaPrimero){yaPrimero=true;decir("primero");
         if(window.glowEvento)glowEvento("primer-ejercicio");}
-      pintarRanita();revisarArmario();
+      pintarRanita();celebrarAvance(revisarArmario());
     }else{decir(tipo);if(tipo==="modulo")revisarArmario();}
   };
   try{
